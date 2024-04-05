@@ -1,0 +1,122 @@
+html {
+  min-height: stretch;
+  min-height: -moz-available;
+}
+
+body {
+  height: stretch;
+  height: -moz-available;
+  /* overflow-y: hidden; */
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #292c2f;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #202020;
+}
+
+.toggle {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 30px;
+}
+
+.toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-btn {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 30px;
+  background-color: #202020;
+  transition: all .4s;
+}
+
+.toggle-btn:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 5px;
+  bottom: 5px;
+  border-radius: 50%;
+  background-color: white;
+  transition: .4s;
+}
+
+.toggle input:checked + .toggle-btn {
+  background-color: #3ba55d;
+}
+
+.toggle input:checked + .toggle-btn:before {
+  transform: translateX(30px);
+}
+
+.toggle-button {
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: larger;
+  text-decoration: solid;
+}
+
+.EmojiPicker {
+  position: absolute;
+  bottom: 7rem;
+  right: 1rem;
+  height: 20rem;
+  width: 20rem;
+  background: none;
+  overflow: hidden;
+}
+
+.ContextMenu {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  background-color: #202020;
+  padding: 0.3rem;
+  border-radius: 10px;
+  box-shadow: 0 0 2px 2px #181818;
+}
+
+.ContextMenu button {
+  height: 2rem;
+  width: 8rem;
+  margin: 0.5rem;
+  background: none;
+  border: none;
+}
+
+.CtxBtn {
+  color: beige;
+}
+
+.CtxBtn:hover {
+  border-radius: 10px;
+  background-color: green;
+  color: beige;
+}
+
+.CtxDelBtn {
+  color: brown;
+}
+
+.CtxDelBtn:hover {
+  border-radius: 10px;
+  background-color: brown;
+  color: beige;
+}

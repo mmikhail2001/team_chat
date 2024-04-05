@@ -1,0 +1,28 @@
+version: "3.0"
+services:
+
+  mongodb:
+    image: mongo:5.0
+    restart: always
+    
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: USERNAME
+      MONGO_INITDB_ROOT_PASSWORD: PASSWORD
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo_data:/data/db
+      
+  keycloak:
+    image: keycloak/keycloak:23.0
+    command: -v start-dev --import-realm
+    ports:
+      - 8080:8080
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+    volumes:
+      - ./config:/opt/keycloak/data/import
+
+volumes:
+  mongo_data:
