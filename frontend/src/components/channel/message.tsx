@@ -2,7 +2,7 @@ import { useState, useEffect, useContext, useRef } from "react";
 import { setDefaultAvatar } from '../../utils/errorhandle';
 import { MessageContext } from "../../contexts/messagectx";
 import { MessageOBJ } from "../../models/models";
-import { RiPencilFill } from "react-icons/ri";
+import { RiPencilFill, RiQuestionAnswerLine } from "react-icons/ri";
 import { UserContext } from "../../contexts/usercontext";
 import Routes from "../../config";
 import AttachmentDefault from "./attachment/default";
@@ -12,6 +12,7 @@ import AttachmentAudio from "./attachment/audio";
 import { FaServer } from "react-icons/fa";
 import { ContextMenu } from "../../contexts/context_menu_ctx";
 import MessageContextMenu from "../../contextmenu/message_context_menu";
+import { MdOutlineQuestionAnswer } from "react-icons/md";
 
 // function Message({ message, short, isRef }: { message: MessageOBJ, short: boolean, isRef: boolean }) {
 function Message({ message, short }: { message: MessageOBJ, short: boolean }) {
@@ -83,13 +84,13 @@ function Message({ message, short }: { message: MessageOBJ, short: boolean }) {
     //     }
     // }, [])
 
-    function handleEditBtn() {
-        if (msgctx.messageEdit) {
-            msgctx.setMessageEdit(false);
-        }
-        msgctx.setMessage(message);
-        msgctx.setMessageEdit(true);
-    }
+    // function handleEditBtn() {
+    //     if (msgctx.messageEdit) {
+    //         msgctx.setMessageEdit(false);
+    //     }
+    //     msgctx.setMessage(message);
+    //     msgctx.setMessageEdit(true);
+    // }
 
     function handleEdit() {
         const url = Routes.Channels + "/" + message.channel_id + "/messages/" + message.id;
@@ -138,7 +139,6 @@ function Message({ message, short }: { message: MessageOBJ, short: boolean }) {
             alert("Message too long");
         }
     }
-
     return (
         <div className="relative w-full flex my-1 hover:bg-zinc-900" onContextMenu={(event) => {
             event.preventDefault();
@@ -147,13 +147,19 @@ function Message({ message, short }: { message: MessageOBJ, short: boolean }) {
         }>
             <div className="absolute left-0 w-24 flex items-center justify-center">
                 {(!message.system_message && !short && ShowMsg) && <img className="h-12 w-12 rounded-xl bg-zinc-800" src={message.author.avatar} alt="Avatar" onError={setDefaultAvatar} />}
-                { message.system_message && <FaServer size={24} />}
+                {message.system_message && <FaServer size={24} />}
             </div>
-            {/* <div className="w-full ml-24 mr-32 flex flex-col" ref={isRef ? messageElement : null}> */}
             <div className="w-full ml-24 mr-32 flex flex-col">
                 {ShowMsg && <>
                     {(!message.system_message && !short) && <span className="text-xl">{message.author.username}</span>}
-                    {!edit && <span className="text-neutral-400">{message.content}</span>}
+                    {!edit && 
+                        <div className="text-neutral-400">
+                        <div className={user_ctx.id === message.author.id ? "bg-gray-800 p-2 rounded-lg inline-block" : "bg-gray-700 bg-opacity-50 p-2 rounded-lg inline-block"}>
+                            {message.content}
+                        </div>
+                      </div>
+                        // <span className="text-neutral-400 rounded-lg bg-gray-800 bg-opacity-50 p-2 inline-block">{message.content}</span>
+                    }
                     {edit &&
                         <div>
                             <input className="bg-zinc-800 w-11/12 outline-none px-2 rounded" type="text" value={msg} onKeyDown={handleKey} onChange={onInputChange} />
@@ -165,9 +171,13 @@ function Message({ message, short }: { message: MessageOBJ, short: boolean }) {
                 </>}
                 {!ShowMsg && <p>Message From User You Blocked! <button className="text-cyan-500" onClick={() => { setShowMsg(true) }}>Reveal</button></p>}
             </div>
-            <div className="absolute right-0 w-32 flex justify-around">
-                <span className="text-xs text-neutral-400">{time}</span>
-                {/* {user_ctx.id === message.author.id && <button onClick={handleEditBtn}><RiPencilFill /></button>} */}
+            <div className="absolute right-0 w-32 flex justify-around" style={{ display: 'flex', alignItems: 'center' }}>
+                <div>
+                    <span className="text-xs text-neutral-400">{time}</span>
+                </div>
+                <div>
+                    {message.has_thread && <MdOutlineQuestionAnswer size={24} />}
+                </div>
             </div>
         </div>
     )

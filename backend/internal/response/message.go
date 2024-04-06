@@ -20,21 +20,33 @@ type Message struct {
 	// AccountID     primitive.ObjectID `bson:"account_id"`
 	Author        User         `json:"author"`
 	ChannelID     string       `json:"channel_id"`
+	ThreadID      string       `json:"thread_id"`
+	HasThread     bool         `json:"has_thread"`
 	SystemMessage bool         `json:"system_message"`
 	CreatedAt     int64        `json:"created_at"`
 	EditedAt      int64        `json:"edited_at"`
 	Attachments   []Attachment `json:"attachments"`
+	Reactions     []Reaction   `json:"reactions"`
 }
 
+type Reaction struct {
+	Reaction string `json:"reaction"`
+	User     User   `json:"user"`
+}
+
+// func NewMessage(message *database.Message, user User, ractions []Reaction) Message {
 func NewMessage(message *database.Message, user User) Message {
 	res_message := Message{
 		ID:            message.ID.Hex(),
 		Content:       message.Content,
 		ChannelID:     message.ChannelID.Hex(),
+		ThreadID:      message.ThreadID.Hex(),
+		HasThread:     message.HasThread,
 		SystemMessage: message.SystemMessage,
 		CreatedAt:     message.CreatedAt,
 		EditedAt:      message.UpdatedAt,
 		Attachments:   []Attachment{},
+		// Reactions:     ractions,
 	}
 
 	if !message.SystemMessage {

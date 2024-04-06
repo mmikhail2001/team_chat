@@ -4,10 +4,27 @@ export type MessageOBJ = {
     content: string
     author: UserOBJ
     channel_id: string
+    thread_id: string
+    has_thread: boolean
     created_at: number
     updated_at: number
     attachments: Attachment[]
+    reactions: ReactionOBJ[]
     system_message: boolean
+}
+
+export type ReactionOBJ = {
+    user: UserOBJ
+    reaction: string
+}
+
+export type UserOBJ = {
+    id: string
+    username: string
+    avatar: string
+    // онлайн, не онлайн
+    status: number
+    created_at: number
 }
 
 export type Attachment = {
@@ -28,14 +45,6 @@ export type Msg_request = {
     channel: string
 }
 
-export type UserOBJ = {
-    id: string
-    username: string
-    avatar: string
-    // онлайн, не онлайн
-    status: number
-    created_at: number
-}
 
 export type InviteOBJ = {
     invite_code: string

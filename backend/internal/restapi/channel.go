@@ -1,14 +1,19 @@
 package restapi
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
 	"strings"
+	"time"
 
+	"github.com/mmikhail2001/team_chat/internal/database"
 	"github.com/mmikhail2001/team_chat/internal/request"
 	"github.com/mmikhail2001/team_chat/internal/response"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 
 	"github.com/gorilla/mux"
 )
@@ -50,6 +55,115 @@ func CreateChannel(ctx *Context) {
 		res_user := response.NewUser(&ctx.User, ctx.Conn.GetUserStatus(ctx.User.ID))
 		ctx.Conn.SendToUser(recipient.ID, "CHANNEL_CREATE", response.NewChannel(channel, []response.User{res_user}))
 	}
+}
+
+func CreateThread(ctx *Context) {
+	url_vars := mux.Vars(ctx.Req)
+	channelID := url_vars["id"]
+	messageID := url_vars["mid"]
+
+	channelObjectID, err := primitive.ObjectIDFromHex(channelID)
+	if err != nil {
+		log.Println("CreateThread: primitive.ObjectIDFromHex", err)
+		ctx.Res.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	messageObjectID, err := primitive.ObjectIDFromHex(messageID)
+	if err != nil {
+		log.Println("CreateThread: primitive.ObjectIDFromHex", err)
+		ctx.Res.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	var message database.Message
+	err = ctx.Db.Mongo.Collection("messages").FindOne(context.Background(), bson.M{"_id": messageObjectID}).Decode(&message)
+	if err != nil {
+		log.Println("CreateThread: ctx.Db.Mongo.Collection.FindOne", err)
+		ctx.Res.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	var channel database.Channel
+	err = ctx.Db.Mongo.Collection("channels").FindOne(context.Background(), bson.M{"_id": channelObjectID}).Decode(&channel)
+	if err != nil {
+		log.Println("CreateThread: ctx.Db.Mongo.Collection.FindOne", err)
+		ctx.Res.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	if message.HasThread {
+		log.Println("thread already exists")
+		var recipients []response.User
+		for _, recipientID := range channel.Recipients {
+			ctx.Conn.AddUserToChannel(recipientID, message.ThreadID.Hex())
+			user, status := ctx.Db.GetUser(recipientID)
+			if status == http.StatusOK {
+				recipients = append(recipients, response.NewUser(user, status))
+			} else {
+				log.Println("CreateThread: ctx.Db.GetUser failed for recipient", recipientID)
+				ctx.Res.WriteHeader(status)
+				return
+			}
+		}
+		channel, status := ctx.Db.GetChannel(message.ThreadID.Hex(), &ctx.User)
+		if status != http.StatusOK {
+			ctx.Res.WriteHeader(status)
+			return
+		}
+		ctx.Res.WriteHeader(http.StatusOK)
+		responseChannel := response.NewChannel(channel, recipients)
+		json.NewEncoder(ctx.Res).Encode(responseChannel)
+		return
+	}
+
+	newChannel := database.Channel{
+		Type:       3,
+		Recipients: channel.Recipients,
+		Name:       message.Content,
+		CreatedAt:  time.Now().Unix(),
+		UpdatedAt:  time.Now().Unix(),
+	}
+
+	result, err := ctx.Db.Mongo.Collection("channels").InsertOne(context.Background(), newChannel)
+	if err != nil {
+		log.Println("CreateThread: ctx.Db.Mongo.Collection.InsertOne", err)
+		ctx.Res.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	newChannel.ID = result.InsertedID.(primitive.ObjectID)
+
+	_, err = ctx.Db.Mongo.Collection("messages").UpdateOne(
+		context.Background(),
+		bson.M{"_id": messageObjectID},
+		bson.M{"$set": bson.M{"thread_id": result.InsertedID, "has_thread": true}},
+	)
+	if err != nil {
+		log.Println("CreateThread: ctx.Db.Mongo.Collection.UpdateOne", err)
+		ctx.Res.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	var recipients []response.User
+	for _, recipientID := range channel.Recipients {
+		user, status := ctx.Db.GetUser(recipientID)
+		if status == http.StatusOK {
+			recipients = append(recipients, response.NewUser(user, status))
+		} else {
+			log.Println("CreateThread: ctx.Db.GetUser failed for recipient", recipientID)
+			ctx.Res.WriteHeader(status)
+			return
+		}
+	}
+
+	for _, recipient := range recipients {
+		ctx.Conn.AddUserToChannel(recipient.ID, newChannel.ID.Hex())
+	}
+
+	responseChannel := response.NewChannel(&newChannel, recipients)
+	ctx.Res.WriteHeader(http.StatusOK)
+	json.NewEncoder(ctx.Res).Encode(responseChannel)
 }
 
 func GetChannels(ctx *Context) {

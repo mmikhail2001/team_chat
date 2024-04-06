@@ -18,6 +18,7 @@ import LoginContextProvider from "./contexts/Login";
 import MessageCTX from "./contexts/messagectx";
 import ContextMenuProvider from "./contexts/context_menu_ctx";
 import ChannelCTX from "./contexts/channelctx";
+import ThreadCTX from "./contexts/threadcontext";
 import UserCTX from "./contexts/usercontext";
 import PopUpProvider from "./contexts/popup";
 import ForgotPassword from "./components/auth/forgetpassword";
@@ -34,7 +35,9 @@ function App() {
 								<PopUpProvider>
 									<ContextMenuProvider>
 										<MessageCTX>  
-											<Home /> 
+											<ThreadCTX>  
+												<Home /> 
+											</ThreadCTX>  
 										</MessageCTX>
 									</ContextMenuProvider>
 								</PopUpProvider>

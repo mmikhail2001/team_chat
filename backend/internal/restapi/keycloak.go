@@ -182,9 +182,9 @@ func (h *Handler) HandleLoginCallback(w http.ResponseWriter, r *http.Request) {
 	}
 	subject := userInfo.Subject
 
+	// создание пользователя
 	collectionUser := h.Db.Mongo.Collection("users")
-
-	_, status := h.Db.GetUser(subject)
+	currentUser, status := h.Db.GetUser(subject)
 	if status == http.StatusNotFound {
 		newUser := bson.M{"_id": subject, "email": userInfo.Email, "username": strings.Split(userInfo.Email, "@")[0]}
 		_, err := collectionUser.InsertOne(context.Background(), newUser)
@@ -193,17 +193,18 @@ func (h *Handler) HandleLoginCallback(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
-	}
-	userFromDB, status := h.Db.GetUser(subject)
-	if status == http.StatusNotFound {
-		log.Println("GetUser new user")
-		w.WriteHeader(http.StatusInternalServerError)
-		return
+		currentUser, status = h.Db.GetUser(subject)
+		if status == http.StatusNotFound {
+			log.Println("GetUser new user")
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
 	}
 
+	// канала с другими участниками
+	// чтобы понять, каких каналов не хватает
 	existingChannels := make(map[string]database.Channel)
-	channels := h.Db.GetChannels(userFromDB)
-
+	channels := h.Db.GetChannels(currentUser)
 	for _, channel := range channels {
 		if channel.Type == 1 {
 			if channel.Recipients[0] == subject {
@@ -214,25 +215,25 @@ func (h *Handler) HandleLoginCallback(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	cursor, err := collectionUser.Find(context.Background(), bson.M{"_id": bson.M{"$ne": subject}})
+	cursorUsers, err := collectionUser.Find(context.Background(), bson.M{"_id": bson.M{"$ne": subject}})
 	if err != nil {
 		log.Println("Find user except new")
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	defer cursor.Close(context.Background())
+	defer cursorUsers.Close(context.Background())
 
-	for cursor.Next(context.Background()) {
-		var user database.User
-		if err := cursor.Decode(&user); err != nil {
+	for cursorUsers.Next(context.Background()) {
+		var otherUser database.User
+		if err := cursorUsers.Decode(&otherUser); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
 
-		recipientID := user.ID
+		recipientID := otherUser.ID
 		if _, ok := existingChannels[recipientID]; !ok {
-			log.Println("create new channel:", userFromDB.Username, "with:", user.Username)
-			newChannel, statusCode := h.Db.CreateChannel("", "", recipientID, userFromDB)
+			log.Println("create new channel:", currentUser.Username, "with:", otherUser.Username)
+			newChannel, statusCode := h.Db.CreateChannel("", "", recipientID, currentUser)
 			if statusCode != http.StatusOK {
 				w.WriteHeader(statusCode)
 				return
@@ -240,7 +241,7 @@ func (h *Handler) HandleLoginCallback(w http.ResponseWriter, r *http.Request) {
 			existingChannels[recipientID] = *newChannel
 		}
 	}
-	if err := cursor.Err(); err != nil {
+	if err := cursorUsers.Err(); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}

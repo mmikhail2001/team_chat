@@ -4,10 +4,12 @@ import Message from './message';
 import Header from './header';
 import { MessageOBJ, ChannelOBJ } from '../../models/models';
 import { ChannelsContext, ChannelContext } from "../../contexts/channelctx";
+import { ThreadContext, ThreadContextOBJ } from "../../contexts/threadcontext";
 import { BsPlusCircleFill } from 'react-icons/bs';
 import Routes from '../../config';
 import { useParams } from 'react-router-dom';
 import Recipients from './Recipients';
+import Thread from './thread';
 import { FaFile } from 'react-icons/fa';
 import { HiXMark } from 'react-icons/hi2';
 
@@ -17,6 +19,8 @@ function Chat() {
 
 	// Emoji picker https://www.cluemediator.com/how-to-add-emoji-picker-in-the-react
 	const channel_context: ChannelContext = useContext(ChannelsContext);
+	const thread_context: ThreadContextOBJ = useContext(ThreadContext);
+
 	const [Input_message, setInput_message] = useState('');
 	const [showPicker, setShowPicker] = useState(false);
 	const [showRecipients, setShowRecipients] = useState(true);
@@ -178,6 +182,7 @@ function Chat() {
 						<input className='w-[85%] h-8 rounded-md bg-zinc-800 px-4' type="text" placeholder="Type a message..." onKeyPress={updateChat} value={Input_message} onChange={onInputChange} />
 					</div>
 				</div>
+				{ thread_context.threadShow && <Thread/> }
 				{ channel.type === 2 && showRecipients && <Recipients channel={channel} /> }
 			</div>
 		</div>

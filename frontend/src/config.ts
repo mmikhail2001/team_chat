@@ -20,6 +20,7 @@ class RoutesCls {
     Invites = this.host + '/invites';
     Search = this.host + '/search';
     Channels = this.host + '/channels';
+    Messages = this.host + '/messages';
 }
 
 

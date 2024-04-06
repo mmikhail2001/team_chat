@@ -197,6 +197,27 @@ func EditMessage(ctx *Context) {
 	ctx.Conn.BroadcastToChannel(message_res.ChannelID, "MESSAGE_MODIFY", message_res)
 }
 
+func CreateReaction(ctx *Context) {
+	ctx.Res.WriteHeader(http.StatusOK)
+	// log.Println("handler CreateReaction")
+	// vars := mux.Vars(ctx.Req)
+	// message_id := vars["mid"]
+	// reaction := ctx.Req.URL.Query().Get("reaction")
+	// if reaction == "" {
+	// 	ctx.Res.WriteHeader(http.StatusBadRequest)
+	// 	return
+	// }
+
+	// type Context struct {
+	// 	Res  http.ResponseWriter
+	// 	Req  *http.Request
+	// 	Db   *database.Database
+	// 	User database.User
+	// 	Conn *websocket.Connections
+	// }
+
+}
+
 func DeleteMessage(ctx *Context) {
 	log.Println("handler DeleteMessage")
 	vars := mux.Vars(ctx.Req)

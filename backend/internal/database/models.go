@@ -52,11 +52,19 @@ type Message struct {
 	ID            primitive.ObjectID `bson:"_id"`
 	Content       string             `bson:"content"`
 	ChannelID     primitive.ObjectID `bson:"channel_id"`
+	ThreadID      primitive.ObjectID `bson:"thread_id"`
+	HasThread     bool               `bson:"has_thread"`
 	AccountID     string             `bson:"account_id"`
 	SystemMessage bool               `bson:"system_message"`
 	CreatedAt     int64              `bson:"created_at"`
 	UpdatedAt     int64              `bson:"updated_at"`
 	Attachments   []Attachment       `bson:"attachments,omitempty"`
+	Reactions     []Reaction         `bson:"reactions,omitempty"`
+}
+
+type Reaction struct {
+	Reaction string `bson:"reaction"`
+	User     string `bson:"user"`
 }
 
 type Attachment struct {

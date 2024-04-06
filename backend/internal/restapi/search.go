@@ -19,7 +19,7 @@ func Search(ctx *Context) {
 	}
 
 	if searchEmployees {
-		dbChannelsUsers, err := ctx.Db.SearchUsers(query, ctx.User.ID)
+		dbChannelsUsers, err := ctx.Db.SearchPersonalChannels(query, ctx.User.ID)
 		if err != nil {
 			log.Println("Search: err", err)
 			ctx.Res.WriteHeader(http.StatusInternalServerError)
@@ -34,6 +34,7 @@ func Search(ctx *Context) {
 						continue
 					}
 					userResponse := response.NewUser(user, ctx.Conn.GetUserStatus(user.ID))
+					// массив из 1 элемента...
 					recipients = append(recipients, userResponse)
 				}
 			}
@@ -43,7 +44,7 @@ func Search(ctx *Context) {
 	}
 
 	if searchChats {
-		dbChannels, err := ctx.Db.SearchChannels(query, ctx.User.ID)
+		dbChannels, err := ctx.Db.SearchGroupChannels(query, ctx.User.ID)
 		if err != nil {
 			return
 		}

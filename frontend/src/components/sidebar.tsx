@@ -47,11 +47,13 @@ function SideBar() {
 		const channels = Array.from(channel_context.channels.values()).sort(sortChannel)
 
 		channels.forEach(channel => {
-			setChannels_element(prevElement => [...prevElement,
-			<ChannelList key={channel.id} channel={channel} />
-			])
-		})
-	}, [channel_context.channels, channel_context.messages])
+			if (channel.type !== 3) {
+				setChannels_element(prevElement => [...prevElement,
+					<ChannelList key={channel.id} channel={channel} />
+				]);
+				}
+			})
+		}, [channel_context.channels, channel_context.messages])
 
 	function handleSearchChange(event: React.ChangeEvent<HTMLInputElement>) {
 		const { value } = event.target;

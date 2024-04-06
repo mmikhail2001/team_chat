@@ -99,6 +99,12 @@ func main() {
 	api.HandleFunc("/channels/{id}/messages/{mid}", oauthHandler.Authenticated(restapi.GetMessage)).Methods("GET")
 	api.HandleFunc("/channels/{id}/messages/{mid}", oauthHandler.Authenticated(restapi.EditMessage)).Methods("PATCH")
 	api.HandleFunc("/channels/{id}/messages/{mid}", oauthHandler.Authenticated(restapi.DeleteMessage)).Methods("DELETE")
+
+	// Threads
+	api.HandleFunc("/channels/{id}/messages/{mid}", oauthHandler.Authenticated(restapi.CreateThread)).Methods("POST")
+	// Reactions
+	api.HandleFunc("/messages/{mid}/react", oauthHandler.Authenticated(restapi.CreateReaction)).Methods("POST")
+
 	// Pin Messages
 	api.HandleFunc("/channels/{id}/pins", oauthHandler.Authenticated(restapi.GetPins)).Methods("GET")
 	api.HandleFunc("/channels/{id}/pins/{mid}", oauthHandler.Authenticated(restapi.PinMsg)).Methods("PUT")

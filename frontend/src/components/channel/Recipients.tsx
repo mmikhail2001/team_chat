@@ -16,7 +16,7 @@ export default function Recipients({ channel }: { channel: ChannelOBJ }) {
   }, [channel])
 
   return (
-    <div className='justify-self-end hidden md:flex w-64 h-full border-l border-zinc-800 p-2 flex-col overflow-y-scroll'>
+    <div className='justify-self-end hidden md:flex w-1/6 h-full border-l border-zinc-800 p-2 flex-col overflow-y-scroll'>
 	  	<h3>Recipients—{recipients.length}</h3>
 	    {recipients}
     </div>
