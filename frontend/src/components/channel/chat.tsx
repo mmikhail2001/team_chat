@@ -86,9 +86,7 @@ function Chat() {
 
 	// TODO: не может доскролить до конца...
 	useEffect(() => {
-		console.log('useEffect channel_context.messages')
         if (messageElement.current !== null) {
-			console.log(messageElement.current.innerHTML)
             messageElement.current.scrollIntoView({
                 behavior: "smooth",
                 block: "end"

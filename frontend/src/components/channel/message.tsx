@@ -13,8 +13,11 @@ import { FaServer } from "react-icons/fa";
 import { ContextMenu } from "../../contexts/context_menu_ctx";
 import MessageContextMenu from "../../contextmenu/message_context_menu";
 import { MdOutlineQuestionAnswer } from "react-icons/md";
+import { FaHeart, FaSmile } from 'react-icons/fa';
+import { BiSolidLike } from "react-icons/bi";
+import { BiSolidDislike } from "react-icons/bi";
 
-// function Message({ message, short, isRef }: { message: MessageOBJ, short: boolean, isRef: boolean }) {
+
 function Message({ message, short }: { message: MessageOBJ, short: boolean }) {
     const msgctx = useContext(MessageContext);
     const user_ctx = useContext(UserContext);
@@ -30,6 +33,10 @@ function Message({ message, short }: { message: MessageOBJ, short: boolean }) {
     const [attachmentElement, setAttachmentElement] = useState<JSX.Element>(<></>);
 
     let time = new Date(message.created_at * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+    // const [reactions, setReactions] = useState<ReactionOBJ[]>([]);
+    const [reactionElements, setReactionElements] = useState<JSX.Element[]>([]);
+
 
     // const [isInitialRender, setIsInitialRender] = useState(true);
 
@@ -60,37 +67,6 @@ function Message({ message, short }: { message: MessageOBJ, short: boolean }) {
             setEdit(false);
         }
     }, [msgctx.messageEdit, msgctx.message, message]);
-
-    // TODO: messageElement назначается DOM элементу (UDP)
-    // хочу чтобы всегда был в скроле
-    // наверное было бы лучше отдать эту проблему компоненту Chat, а не Message
-    // useEffect(() => {
-    //     if (messageElement.current !== null) {
-    //         if (isInitialRender) {
-    //             messageElement.current.scrollIntoView(false); // Без анимации для первого рендера
-    //         } else {
-    //             messageElement.current.scrollIntoView({ behavior: "smooth", block: "end" });
-    //         }
-    //     }
-    // }, []);
-
-
-    // useEffect(() => {
-    //     if (messageElement.current !== null) {
-    //         messageElement.current.scrollIntoView({
-    //             behavior: "smooth",
-    //             block: "end"
-    //         });
-    //     }
-    // }, [])
-
-    // function handleEditBtn() {
-    //     if (msgctx.messageEdit) {
-    //         msgctx.setMessageEdit(false);
-    //     }
-    //     msgctx.setMessage(message);
-    //     msgctx.setMessageEdit(true);
-    // }
 
     function handleEdit() {
         const url = Routes.Channels + "/" + message.channel_id + "/messages/" + message.id;
@@ -139,6 +115,60 @@ function Message({ message, short }: { message: MessageOBJ, short: boolean }) {
             alert("Message too long");
         }
     }
+
+    // useEffect(() => {
+    //     setReactions(message.reactions);
+    // }, [message]);
+
+    const handleReactionClick = (reactionType: string) => {
+        console.log("handleReactionClick")
+    };
+
+    useEffect(() => {
+        console.log("useEffect set react")
+        const updateReactions = () => {
+            const reactionCounts: { [key: string]: number } = {};
+            console.log(">>>> message.reactions ", message.reactions)
+            message.reactions?.forEach(reaction => {
+                if (!reactionCounts[reaction.reaction]) {
+                    reactionCounts[reaction.reaction] = 0;
+                }
+                reactionCounts[reaction.reaction]++;
+            });
+
+    
+            const reactionsMap: { [key: string]: React.ReactNode } = {
+                'love': <FaHeart className='reaction-icon text-2xl text-red-500 cursor-pointer hover:text-red-600'/>,
+                'smile': <FaSmile className='reaction-icon text-2xl text-yellow-500 cursor-pointer hover:text-yellow-600'/>,
+                'like': <BiSolidLike className='reaction-icon text-2xl text-green-600 cursor-pointer hover:text-green-700' />,
+                'dislike': <BiSolidDislike className='reaction-icon text-2xl text-blue-500 cursor-pointer hover:text-blue-600'/>
+            };
+    
+            const reactionElements: JSX.Element[] = [];
+            Object.keys(reactionsMap).forEach(reactionType => {
+                const count = reactionCounts[reactionType] || 0;
+                if (count > 0) {
+                    const isUserReaction = user_ctx.reactions.has(message.id) && user_ctx.reactions.get(message.id) === reactionType;
+                    console.log(reactionType, message.id, isUserReaction)
+                    console.log("user_ctx.reactions ===", user_ctx.reactions)
+                    const reactionIcon = reactionsMap[reactionType];
+                    const element = (
+                        <div key={reactionType} className={`flex gap-2 ${isUserReaction ? 'bg-sky-600 p-1 rounded-lg px-2' : ''}`} onClick={() => handleReactionClick(reactionType)}>
+                            <div className="flex items-center">
+                                {reactionIcon}
+                                {isUserReaction ? <span className="font-bold ml-1">{count}</span> : <span className="ml-1">{count}</span>}
+                            </div>
+                        </div>
+                    );
+                    reactionElements.push(element);
+                }
+            });
+            return reactionElements;
+        };
+        setReactionElements(updateReactions());
+    }, [message.reactions, user_ctx.reactions]);
+
+
     return (
         <div className="relative w-full flex my-1 hover:bg-zinc-900" onContextMenu={(event) => {
             event.preventDefault();
@@ -170,6 +200,9 @@ function Message({ message, short }: { message: MessageOBJ, short: boolean }) {
                     {isBlocked && <p className="text-cyan-500 text-xs cursor-pointer" onClick={() => { setShowMsg(false) }}>Hide</p>}
                 </>}
                 {!ShowMsg && <p>Message From User You Blocked! <button className="text-cyan-500" onClick={() => { setShowMsg(true) }}>Reveal</button></p>}
+                <div className="flex gap-2 my-2">
+                    {reactionElements}
+                </div>
             </div>
             <div className="absolute right-0 w-32 flex justify-around" style={{ display: 'flex', alignItems: 'center' }}>
                 <div>

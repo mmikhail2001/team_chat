@@ -1,4 +1,3 @@
-
 export type MessageOBJ = {
     id: string
     content: string
@@ -14,7 +13,7 @@ export type MessageOBJ = {
 }
 
 export type ReactionOBJ = {
-    user: UserOBJ
+    user_id: string
     reaction: string
 }
 

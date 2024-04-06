@@ -222,13 +222,22 @@ func CreateReaction(ctx *Context) {
 		return
 	}
 
+	var newReactions []database.Reaction
+
+	for _, existingReaction := range message.Reactions {
+		if existingReaction.UserID != ctx.User.ID {
+			newReactions = append(newReactions, existingReaction)
+		}
+	}
+
 	reactionToAdd := database.Reaction{Reaction: reaction, UserID: ctx.User.ID}
-	message.Reactions = append(message.Reactions, reactionToAdd)
+	newReactions = append(newReactions, reactionToAdd)
+	message.Reactions = newReactions
 
 	_, err = ctx.Db.Mongo.Collection("messages").UpdateOne(
 		context.TODO(),
 		bson.M{"_id": message.ID},
-		bson.M{"$addToSet": bson.M{"reactions": reactionToAdd}},
+		bson.M{"$set": bson.M{"reactions": newReactions}},
 	)
 	if err != nil {
 		ctx.Res.WriteHeader(http.StatusInternalServerError)

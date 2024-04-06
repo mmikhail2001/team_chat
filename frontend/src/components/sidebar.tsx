@@ -71,7 +71,6 @@ function SideBar() {
 			},
 		})
 			.then(response => {
-				console.log(response.status)
 				if (searchChats.current.value.trim() === '') {
 					setIsSearchActive(false);
 					return;

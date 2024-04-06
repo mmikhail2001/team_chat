@@ -60,6 +60,7 @@ func (db *Database) CreateMessage(content string, channel_id string, system_mess
 		SystemMessage: system_message,
 		CreatedAt:     time.Now().Unix(),
 		UpdatedAt:     time.Now().Unix(),
+		Reactions:     []Reaction{},
 	}
 
 	if !system_message {

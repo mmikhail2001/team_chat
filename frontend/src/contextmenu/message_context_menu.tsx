@@ -8,7 +8,6 @@ import Routes from '../config'
 import DeleteMessage from '../components/popup/DeleteMessage';
 import { PopUpContext } from '../contexts/popup';
 import { FaHeart, FaSmile } from 'react-icons/fa';
-import { BsFillHeartFill, BsFillXDiamondFill } from 'react-icons/bs';
 import { BiSolidLike } from "react-icons/bi";
 import { BiSolidDislike } from "react-icons/bi";
 
@@ -19,7 +18,6 @@ interface propsMsgCtxProps {
 
 export default function MessageContextMenu(props: propsMsgCtxProps) {
     const message = props.message;
-    console.log('---->', message.content)
     const user_ctx = useContext(UserContext);
     const popup_ctx = useContext(PopUpContext);
     const channel_ctx = useContext(ChannelsContext);
@@ -43,7 +41,6 @@ export default function MessageContextMenu(props: propsMsgCtxProps) {
         } else {
             setIsPinned(false);
         }
-        console.log("isPinned ===", isPinned)
     }, [channel_ctx.pinnedMessages, message.id])
     // если держать контекстное меню включенным и другой пользователь сделает pin
     // то в режиме реального времени в данном контекстном меню все изменится
@@ -106,7 +103,6 @@ export default function MessageContextMenu(props: propsMsgCtxProps) {
                     }
                     const updatedMessages = notUpdatedMessages.map(messageMap => {
                         if (message.id === messageMap.id) {
-                            console.log("update message", message.content)
                             return {
                                 ...messageMap,
                                 has_thread: true,
@@ -139,19 +135,38 @@ export default function MessageContextMenu(props: propsMsgCtxProps) {
 
     const sendReaction = (reaction: string) => {
         const url = `${Routes.Messages}/${message.id}/react?reaction=${reaction}`;
+        
+        // Проверяем, установлена ли реакция пользователя на данное сообщение
+        if (user_ctx.reactions.has(message.id)) {
+            const currentUserReaction = user_ctx.reactions.get(message.id);
+            if (currentUserReaction === reaction) {
+                return;
+            } else {
+                const updatedReactions = new Map(user_ctx.reactions);
+                updatedReactions.delete(message.id);
+                // TODO: deleteReactions специальный хук
+                user_ctx.setReactions(updatedReactions);
+            }
+        }
+    
         fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
         })
-            .then(response => response.json())
-            .then(updatedMessage => {
-                channel_ctx.UpdateMessage(updatedMessage);
-            })
-            .catch(error => console.error('Error sending reaction:', error));
+        .then(response => response.json())
+        .then(updatedMessage => {
+            // Обновляем сообщение в контексте канала
+            channel_ctx.UpdateMessage(updatedMessage);
+    
+            // Обновляем реакции пользователя
+            const updatedReactions = new Map(user_ctx.reactions);
+            updatedReactions.set(message.id, reaction);
+            user_ctx.setReactions(updatedReactions);
+        })
+        .catch(error => console.error('Error sending reaction:', error));
     };
-
 
 
     return (

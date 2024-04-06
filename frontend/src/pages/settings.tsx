@@ -32,7 +32,6 @@ function Settings() {
             let reader = new FileReader();
             reader.readAsDataURL(avatar_input.current.files[0]);
             reader.onload = () => {
-                console.log(reader.result);
                 fetch(Routes.currentUser, {
                     method: "PATCH",
                     headers: {
@@ -101,14 +100,11 @@ function Settings() {
     function onIconChange() {
         if (avatar_input.current.files && avatar_input.current.files.length > 0) {
             const file = avatar_input.current.files[0];
-            console.log('avatar_input.current.value = ', avatar_input.current.value)
             if (file.size > 2097152) {
                 alert("image is bigger than 2MB")
                 avatar_input.current.value = ''
                 return
             }
-            console.log('avatar_image.current.src = ', avatar_image.current.src)
-            console.log('URL.createObjectURL(file) = ', URL.createObjectURL(file))
             // файл помещается в ОЗУ браузера
             // URL.createObjectURL(file) - это временная ссылка на этот файл
             // следующая строчка позволяет отобразить данный файл 

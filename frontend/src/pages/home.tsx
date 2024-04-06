@@ -11,6 +11,7 @@ import { UserContext, UserContextOBJ } from "../contexts/usercontext";
 import { ChannelOBJ, MessageOBJ, ReadyOBJ, Status } from "../models/models";
 import { Relationship as RelationshipOBJ } from "../models/relationship";
 import PopUp from "./popup";
+import { log } from "console";
 
 function Home() {
 	const user_ctx: UserContextOBJ = useContext(UserContext);
@@ -90,11 +91,18 @@ function Home() {
 					ready.channels.forEach((channel: ChannelOBJ) => {
 						// TODO: в общем, при установлении *нового* веб сокета, сервер отправляет нам по ws все данные
 						// заносим все эти данные, обновляем все каналы, сообщения
-
 						channel_context.setChannel(prev => new Map(prev.set(channel.id, channel)));
-
 						GetMessages(channel.id).then((msgs: MessageOBJ[]) => {
 							channel_context.SetMessages(channel.id, msgs.reverse())
+							const userReactions = user_ctx.reactions;
+							msgs.forEach(msg => {
+								msg.reactions?.forEach(reaction => {
+									if (reaction.user_id === ready.user.id) {
+										userReactions.set(msg.id, reaction.reaction);
+									}
+								});
+							});
+							user_ctx.setReactions(userReactions);
 						})
 
 						GetPinnedMessages(channel.id).then((msgs: MessageOBJ[]) => {

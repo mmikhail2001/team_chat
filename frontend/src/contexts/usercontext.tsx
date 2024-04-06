@@ -3,6 +3,7 @@ import useMap from '../hooks/useMap';
 import Routes from "../config";
 import { Relationship } from "../models/relationship";
 import { GetRelationships } from "../api/relationship";
+import { GetMessages } from "../api/message";
 import { useNavigate } from "react-router-dom";
 
 export type UserContextOBJ = {
@@ -15,6 +16,10 @@ export type UserContextOBJ = {
     relationships: Map<String,Relationship>;
 	setRelationships: React.Dispatch<React.SetStateAction<Map<String, Relationship>>>;
     deleterelationship: (key: String) => void;
+    
+    reactions: Map<String,String>;
+	setReactions: React.Dispatch<React.SetStateAction<Map<String, String>>>;
+    deleteReactions: (key: String) => void;
 }
 
 export const UserContext = createContext<UserContextOBJ>(undefined!);
@@ -25,6 +30,7 @@ function UserCTX({ children }: { children: React.ReactChild }) {
     const [username, setUsername] = useState<string>("");
     const [avatar, setAvatar] = useState<string>("");
 	const [relationships, setRelationships, deleterelationship] = useMap<Relationship>(new Map<String,Relationship>());
+	const [reactions, setReactions, deleteReactions] = useMap<String>(new Map<String,String>());
 
     useEffect(() => {
         // обогащение состояния пользователя инфой с бекенда
@@ -36,6 +42,7 @@ function UserCTX({ children }: { children: React.ReactChild }) {
                     setUsername(user.username);
                     setAvatar(user.avatar);
                 });
+
                 // запрос всех: друзей, кто онлайн, кто офлайн
                 GetRelationships().then(relationships => {
                     relationships.forEach(relationship => {
@@ -45,7 +52,6 @@ function UserCTX({ children }: { children: React.ReactChild }) {
                         });
                     });
                 });
-            // TODO: 403 Forbidden  ???
             } else {
                 if (!location.pathname.includes("auth")) {
                     navigate('/auth/login')
@@ -64,6 +70,10 @@ function UserCTX({ children }: { children: React.ReactChild }) {
         relationships: relationships,
         setRelationships: setRelationships,
         deleterelationship: deleterelationship,
+
+        reactions: reactions,
+        setReactions: setReactions,
+        deleteReactions: deleteReactions,
     }
     
     return (

@@ -61,9 +61,7 @@ function Thread() {
 	}, [channel_context.messages, channel_id]);
 
 	useEffect(() => {
-		console.log('useEffect channel_context.messages')
 		if (messageElement.current !== null) {
-			console.log(messageElement.current.innerHTML)
 			messageElement.current.scrollIntoView({
 				behavior: "smooth",
 				block: "end"
@@ -97,38 +95,8 @@ function Thread() {
 	}
 
 	function unshowThread() {
-		console.log(1)
 		thread_context.setThreadShow(false)
 	}
-
-	// return (
-	// 	<div className="relative h-full w-full flex-col flex">
-	// 		<div className='absolute w-full h-16 flex items-center px-6 border-b border-zinc-800'>
-	// 			<div className='w-full flex items-center justify-between'>
-	// 				<span className='text-lg'>Thread by message: {thread_context.message.content}</span>
-	// 				<div className="flex items-center">
-	// 					<IoClose
-	// 						className="text-white cursor-pointer"
-	// 						onClick={unshowThread}
-	// 						size="20"
-	// 						style={{ marginLeft: '-7px', marginTop: '2px' }}
-	// 					/>
-	// 				</div>
-	// 			</div>
-	// 		</div>
-
-	// 		<div className='flex mt-16 h-full overflow-hidden w-full'>
-	// 			<div className='flex-col flex relative w-full'>
-	// 				<div className="mb-16 flex-col-reverse overflow-x-hidden overflow-y-scroll">
-	// 					{MessageElement}
-	// 				</div>
-	// 				<div className="h-16 absolute bottom-0 w-full flex items-center justify-evenly border-t border-zinc-800">
-	// 					<input className='w-[85%] h-8 rounded-md bg-zinc-800 px-4' type="text" placeholder="Type a message..." onKeyPress={updateChat} value={Input_message} onChange={onInputChange} />
-	// 				</div>
-	// 			</div>
-	// 		</div>
-	// 	</div>
-	// );
 	return (
 		<div className="relative h-full w-1/2 flex-col flex">
 			<div className='absolute w-full h-16 flex items-center px-6 bg-slate-800'>

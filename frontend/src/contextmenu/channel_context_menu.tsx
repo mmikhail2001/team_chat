@@ -54,11 +54,9 @@ export default function ChannelContextMenu(props: propsChannelCtxProps) {
         // если личка
         if (props.channel.type === 1) {
             const relationship = user_ctx.relationships.get(props.channel.recipients[0].id)
-            // console.log(relationship)
             if (relationship === undefined) {
                 setRelationshipStatus(0)
             } else {
-                console.log('setRelationshipStatus = = =', relationship.type)
                 setRelationshipStatus(relationship.type)
             }
         }
