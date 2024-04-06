@@ -18,23 +18,17 @@ type Message struct {
 	Content string `json:"content"`
 	// а в слое db так ...........
 	// AccountID     primitive.ObjectID `bson:"account_id"`
-	Author        User         `json:"author"`
-	ChannelID     string       `json:"channel_id"`
-	ThreadID      string       `json:"thread_id"`
-	HasThread     bool         `json:"has_thread"`
-	SystemMessage bool         `json:"system_message"`
-	CreatedAt     int64        `json:"created_at"`
-	EditedAt      int64        `json:"edited_at"`
-	Attachments   []Attachment `json:"attachments"`
-	Reactions     []Reaction   `json:"reactions"`
+	Author        User                `json:"author"`
+	ChannelID     string              `json:"channel_id"`
+	ThreadID      string              `json:"thread_id"`
+	HasThread     bool                `json:"has_thread"`
+	SystemMessage bool                `json:"system_message"`
+	CreatedAt     int64               `json:"created_at"`
+	EditedAt      int64               `json:"edited_at"`
+	Attachments   []Attachment        `json:"attachments"`
+	Reactions     []database.Reaction `json:"reactions"`
 }
 
-type Reaction struct {
-	Reaction string `json:"reaction"`
-	User     User   `json:"user"`
-}
-
-// func NewMessage(message *database.Message, user User, ractions []Reaction) Message {
 func NewMessage(message *database.Message, user User) Message {
 	res_message := Message{
 		ID:            message.ID.Hex(),
@@ -46,7 +40,7 @@ func NewMessage(message *database.Message, user User) Message {
 		CreatedAt:     message.CreatedAt,
 		EditedAt:      message.UpdatedAt,
 		Attachments:   []Attachment{},
-		// Reactions:     ractions,
+		Reactions:     message.Reactions,
 	}
 
 	if !message.SystemMessage {

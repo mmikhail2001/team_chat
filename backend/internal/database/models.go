@@ -63,8 +63,8 @@ type Message struct {
 }
 
 type Reaction struct {
-	Reaction string `bson:"reaction"`
-	User     string `bson:"user"`
+	Reaction string `bson:"reaction" json:"reaction"`
+	UserID   string `bson:"user_id" json:"user_id"`
 }
 
 type Attachment struct {

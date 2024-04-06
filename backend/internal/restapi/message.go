@@ -198,24 +198,60 @@ func EditMessage(ctx *Context) {
 }
 
 func CreateReaction(ctx *Context) {
+	log.Println("handler CreateReaction")
+	vars := mux.Vars(ctx.Req)
+	messageID := vars["mid"]
+	reaction := ctx.Req.URL.Query().Get("reaction")
+	if reaction == "" {
+		ctx.Res.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	messageObjectID, err := primitive.ObjectIDFromHex(messageID)
+	if err != nil {
+		log.Println("CreateReaction: primitive.ObjectIDFromHex", err)
+		ctx.Res.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	var message database.Message
+	err = ctx.Db.Mongo.Collection("messages").FindOne(context.TODO(), bson.M{"_id": messageObjectID}).Decode(&message)
+	if err != nil {
+		ctx.Res.WriteHeader(http.StatusNotFound)
+		log.Println("Failed to find message:", err)
+		return
+	}
+
+	reactionToAdd := database.Reaction{Reaction: reaction, UserID: ctx.User.ID}
+	message.Reactions = append(message.Reactions, reactionToAdd)
+
+	_, err = ctx.Db.Mongo.Collection("messages").UpdateOne(
+		context.TODO(),
+		bson.M{"_id": message.ID},
+		bson.M{"$addToSet": bson.M{"reactions": reactionToAdd}},
+	)
+	if err != nil {
+		ctx.Res.WriteHeader(http.StatusInternalServerError)
+		log.Println("Failed to update message reactions:", err)
+		return
+	}
+
+	message.Reactions = append(message.Reactions, reactionToAdd)
+
+	user, _ := ctx.Db.GetUser(ctx.User.ID)
+
+	resMessage := response.NewMessage(&message, response.NewUser(user, ctx.Conn.GetUserStatus(user.ID)))
+
+	response, err := json.Marshal(resMessage)
+	if err != nil {
+		ctx.Res.WriteHeader(http.StatusInternalServerError)
+		log.Println("Failed to marshal response:", err)
+		return
+	}
+
+	ctx.Res.Header().Set("Content-Type", "application/json")
 	ctx.Res.WriteHeader(http.StatusOK)
-	// log.Println("handler CreateReaction")
-	// vars := mux.Vars(ctx.Req)
-	// message_id := vars["mid"]
-	// reaction := ctx.Req.URL.Query().Get("reaction")
-	// if reaction == "" {
-	// 	ctx.Res.WriteHeader(http.StatusBadRequest)
-	// 	return
-	// }
-
-	// type Context struct {
-	// 	Res  http.ResponseWriter
-	// 	Req  *http.Request
-	// 	Db   *database.Database
-	// 	User database.User
-	// 	Conn *websocket.Connections
-	// }
-
+	ctx.Res.Write(response)
 }
 
 func DeleteMessage(ctx *Context) {
