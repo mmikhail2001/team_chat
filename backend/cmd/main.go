@@ -104,6 +104,7 @@ func main() {
 	api.HandleFunc("/channels/{id}/messages/{mid}", oauthHandler.Authenticated(restapi.CreateThread)).Methods("POST")
 	// Reactions
 	api.HandleFunc("/messages/{mid}/react", oauthHandler.Authenticated(restapi.CreateReaction)).Methods("POST")
+	api.HandleFunc("/messages/{mid}/react", oauthHandler.Authenticated(restapi.DeleteReaction)).Methods("DELETE")
 
 	// Pin Messages
 	api.HandleFunc("/channels/{id}/pins", oauthHandler.Authenticated(restapi.GetPins)).Methods("GET")

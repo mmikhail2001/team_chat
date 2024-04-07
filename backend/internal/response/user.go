@@ -7,11 +7,17 @@ import (
 )
 
 type User struct {
-	ID        string `json:"id"`
-	Avatar    string `json:"avatar"`
-	Username  string `json:"username"`
-	Status    int    `json:"status"`
-	CreatedAt int64  `json:"created_at"`
+	ID        string            `json:"id"`
+	Avatar    string            `json:"avatar"`
+	Username  string            `json:"username"`
+	Status    int               `json:"status"`
+	CreatedAt int64             `json:"created_at"`
+	Reactions []ReactionMessage `json:"reactions"`
+}
+
+type ReactionMessage struct {
+	MessageID string `json:"message_id"`
+	Reaction  string `json:"reaction"`
 }
 
 func GetUrl(user *database.User) string {

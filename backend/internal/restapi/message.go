@@ -197,6 +197,67 @@ func EditMessage(ctx *Context) {
 	ctx.Conn.BroadcastToChannel(message_res.ChannelID, "MESSAGE_MODIFY", message_res)
 }
 
+func DeleteReaction(ctx *Context) {
+	log.Println("handler DeleteReaction")
+	vars := mux.Vars(ctx.Req)
+	messageID := vars["mid"]
+
+	// Получаем ID пользователя
+	userID := ctx.User.ID
+
+	// Находим сообщение по его ID
+	messageObjectID, err := primitive.ObjectIDFromHex(messageID)
+	if err != nil {
+		log.Println("DeleteReaction: primitive.ObjectIDFromHex", err)
+		ctx.Res.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	var message database.Message
+	err = ctx.Db.Mongo.Collection("messages").FindOne(context.TODO(), bson.M{"_id": messageObjectID}).Decode(&message)
+	if err != nil {
+		ctx.Res.WriteHeader(http.StatusNotFound)
+		log.Println("Failed to find message:", err)
+		return
+	}
+
+	// Удаляем реакцию пользователя из списка реакций сообщения
+	var newReactions []database.Reaction
+	for _, existingReaction := range message.Reactions {
+		if existingReaction.UserID != userID {
+			newReactions = append(newReactions, existingReaction)
+		}
+	}
+
+	message.Reactions = newReactions
+
+	// Обновляем сообщение в базе данных с новым списком реакций
+	_, err = ctx.Db.Mongo.Collection("messages").UpdateOne(
+		context.TODO(),
+		bson.M{"_id": message.ID},
+		bson.M{"$set": bson.M{"reactions": newReactions}},
+	)
+	if err != nil {
+		ctx.Res.WriteHeader(http.StatusInternalServerError)
+		log.Println("Failed to update message reactions:", err)
+		return
+	}
+
+	// Возвращаем обновленное сообщение в формате JSON
+	user, _ := ctx.Db.GetUser(userID)
+	resMessage := response.NewMessage(&message, response.NewUser(user, ctx.Conn.GetUserStatus(user.ID)))
+	response, err := json.Marshal(resMessage)
+	if err != nil {
+		ctx.Res.WriteHeader(http.StatusInternalServerError)
+		log.Println("Failed to marshal response:", err)
+		return
+	}
+
+	ctx.Res.Header().Set("Content-Type", "application/json")
+	ctx.Res.WriteHeader(http.StatusOK)
+	ctx.Res.Write(response)
+}
+
 func CreateReaction(ctx *Context) {
 	log.Println("handler CreateReaction")
 	vars := mux.Vars(ctx.Req)
@@ -244,8 +305,6 @@ func CreateReaction(ctx *Context) {
 		log.Println("Failed to update message reactions:", err)
 		return
 	}
-
-	message.Reactions = append(message.Reactions, reactionToAdd)
 
 	user, _ := ctx.Db.GetUser(ctx.User.ID)
 

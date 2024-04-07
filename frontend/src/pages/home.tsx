@@ -73,10 +73,6 @@ function Home() {
 			if (typeof data !== "string") {
 				return
 			}
-			// data = text<payload>  
-			// payload = json<event, data>
-			// TODO: data 2 раза... 
-
 			const payload = JSON.parse(data);
 
 			switch (payload.event) {
@@ -87,28 +83,26 @@ function Home() {
 					user_ctx.setId(ready.user.id);
 					user_ctx.setUsername(ready.user.username);
 					user_ctx.setAvatar(ready.user.avatar);
-
 					ready.channels.forEach((channel: ChannelOBJ) => {
-						// TODO: в общем, при установлении *нового* веб сокета, сервер отправляет нам по ws все данные
-						// заносим все эти данные, обновляем все каналы, сообщения
 						channel_context.setChannel(prev => new Map(prev.set(channel.id, channel)));
+						// const userReactions = new Map(user_ctx.reactions);
 						GetMessages(channel.id).then((msgs: MessageOBJ[]) => {
 							channel_context.SetMessages(channel.id, msgs.reverse())
-							const userReactions = user_ctx.reactions;
-							msgs.forEach(msg => {
-								msg.reactions?.forEach(reaction => {
-									if (reaction.user_id === ready.user.id) {
-										userReactions.set(msg.id, reaction.reaction);
-									}
-								});
-							});
-							user_ctx.setReactions(userReactions);
+							// msgs.forEach(msg => {
+							// 	msg.reactions?.forEach(reaction => {
+							// 		if (reaction.user_id === ready.user.id) {
+							// 			userReactions.set(msg.id, reaction.reaction);
+							// 		}
+							// 	});
+							// });
+							// user_ctx.setReactions(userReactions);
 						})
 
 						GetPinnedMessages(channel.id).then((msgs: MessageOBJ[]) => {
 							channel_context.SetPinnedMessages(channel.id, msgs.reverse())
 						})
 					});
+					console.log("finally reactions user", user_ctx.reactions)
 					break;
 
 				case "INVAILD_SESSION":

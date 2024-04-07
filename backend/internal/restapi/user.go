@@ -16,8 +16,53 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+// func GetUser(ctx *Context) {
+// 	user_res := response.NewUser(&ctx.User, ctx.Conn.GetUserStatus(ctx.User.ID))
+// 	ctx.WriteJSON(user_res)
+// }
+
 func GetUser(ctx *Context) {
+	filter := bson.M{
+		"reactions": bson.M{
+			"$elemMatch": bson.M{"user_id": ctx.User.ID},
+		},
+	}
+
+	messagesCollection := ctx.Db.Mongo.Collection("messages")
+
+	cur, err := messagesCollection.Find(context.TODO(), filter)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer cur.Close(context.TODO())
+
+	var messages []database.Message
+	for cur.Next(context.TODO()) {
+		var msg database.Message
+		if err := cur.Decode(&msg); err != nil {
+			log.Fatal(err)
+		}
+		messages = append(messages, msg)
+	}
+
+	if err := cur.Err(); err != nil {
+		log.Fatal(err)
+	}
+
+	var userReactions []response.ReactionMessage
+	for _, msg := range messages {
+		for _, reaction := range msg.Reactions {
+			if reaction.UserID == ctx.User.ID {
+				userReactions = append(userReactions, response.ReactionMessage{
+					MessageID: msg.ID.Hex(),
+					Reaction:  reaction.Reaction,
+				})
+			}
+		}
+	}
+
 	user_res := response.NewUser(&ctx.User, ctx.Conn.GetUserStatus(ctx.User.ID))
+	user_res.Reactions = userReactions
 	ctx.WriteJSON(user_res)
 }
 

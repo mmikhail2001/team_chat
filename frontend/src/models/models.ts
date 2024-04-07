@@ -24,7 +24,28 @@ export type UserOBJ = {
     // онлайн, не онлайн
     status: number
     created_at: number
+    reactions: ReactionMessageOBJ[]
 }
+
+export type ReactionMessageOBJ = {
+    message_id: string
+    reaction: string
+}
+
+// type User struct {
+// 	ID        string            `json:"id"`
+// 	Avatar    string            `json:"avatar"`
+// 	Username  string            `json:"username"`
+// 	Status    int               `json:"status"`
+// 	CreatedAt int64             `json:"created_at"`
+// 	Reactions []ReactionMessage `json:"reactions"`
+// }
+
+// type ReactionMessage struct {
+// 	MessageID string `json:"message_id"`
+// 	Reaction  string `json:"reaction"`
+// }
+
 
 export type Attachment = {
     id: string

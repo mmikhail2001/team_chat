@@ -5,6 +5,7 @@ import { ChannelsContext, ChannelContext } from "../../contexts/channelctx";
 import { ThreadContext, ThreadContextOBJ } from "../../contexts/threadcontext";
 import Routes from '../../config';
 import { IoClose } from 'react-icons/io5';
+import { truncate } from 'lodash';
 
 function Thread() {
 	// Emoji picker https://www.cluemediator.com/how-to-add-emoji-picker-in-the-react
@@ -97,13 +98,23 @@ function Thread() {
 	function unshowThread() {
 		thread_context.setThreadShow(false)
 	}
+
+	function truncateString(str: string, numWords: number) {
+		const words = str.split(' ');
+		if (words.length > numWords) {
+			return words.slice(0, numWords).join(' ') + '...';
+		} else {
+			return str;
+		}
+	}
+
 	return (
 		<div className="relative h-full w-1/2 flex-col flex">
 			<div className='absolute w-full h-16 flex items-center px-6 bg-slate-800'>
 				<div className='w-full flex items-center justify-between'>
-					<span className='text-lg p-2'>
-						Thread by message:  <span className='text-lg p-2 rounded-md bg-slate-900'>{thread_context.message.content}</span>
-					</span> 
+				<span className='text-lg p-2'>
+					Thread by message: <span className='text-lg p-2 rounded-md bg-slate-900'>{truncateString(thread_context.message.content, 3)}</span>
+				</span>
 					<div className="flex items-center">
 						<IoClose
 							className="text-white cursor-pointer"

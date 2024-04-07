@@ -4,6 +4,7 @@ import { MessageContext } from "../../contexts/messagectx";
 import { MessageOBJ } from "../../models/models";
 import { RiPencilFill, RiQuestionAnswerLine } from "react-icons/ri";
 import { UserContext } from "../../contexts/usercontext";
+import { ChannelContext, ChannelsContext } from "../../contexts/channelctx";
 import Routes from "../../config";
 import AttachmentDefault from "./attachment/default";
 import AttachmentImage from "./attachment/image";
@@ -21,6 +22,7 @@ import { BiSolidDislike } from "react-icons/bi";
 function Message({ message, short }: { message: MessageOBJ, short: boolean }) {
     const msgctx = useContext(MessageContext);
     const user_ctx = useContext(UserContext);
+    const channel_ctx = useContext(ChannelsContext);
     // const messageElement = useRef<HTMLDivElement>(null);
     const ctx_menu = useContext(ContextMenu);
 
@@ -116,12 +118,48 @@ function Message({ message, short }: { message: MessageOBJ, short: boolean }) {
         }
     }
 
-    // useEffect(() => {
-    //     setReactions(message.reactions);
-    // }, [message]);
-
     const handleReactionClick = (reactionType: string) => {
-        console.log("handleReactionClick")
+        console.log("handleReactionClick");
+    
+        // Проверяем, была ли уже поставлена данная реакция пользователем на данном сообщении
+        if (user_ctx.reactions.has(message.id) && user_ctx.reactions.get(message.id) === reactionType) {
+            // Если реакция уже стоит, то нужно ее удалить
+            fetch(`/api/messages/${message.id}/react`, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (response.ok) {
+                    response.json().then((updatedMessage: MessageOBJ) => {
+                        // Обновляем сообщение в контексте канала
+                        channel_ctx.UpdateMessage(updatedMessage);
+                        // Обновляем реакции пользователя
+                        const updatedReactions = new Map(user_ctx.reactions);
+                        updatedReactions.delete(message.id);
+                        user_ctx.setReactions(updatedReactions);
+                    });
+                }
+            })
+            .catch(error => console.error('Error removing reaction:', error));
+        } else {
+            // Устанавливаем новую реакцию
+            fetch(`/api/messages/${message.id}/react?reaction=${reactionType}`, {
+                method: 'POST'
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Получаем обновленную структуру сообщения с сервера
+                    response.json().then((updatedMessage: MessageOBJ) => {
+                        // Обновляем сообщение в контексте канала
+                        channel_ctx.UpdateMessage(updatedMessage);
+                        // Обновляем реакции пользователя
+                        const updatedReactions = new Map(user_ctx.reactions);
+                        updatedReactions.set(message.id, reactionType);
+                        user_ctx.setReactions(updatedReactions);
+                    });
+                }
+            })
+            .catch(error => console.error('Error setting reaction:', error));
+        }
     };
 
     useEffect(() => {

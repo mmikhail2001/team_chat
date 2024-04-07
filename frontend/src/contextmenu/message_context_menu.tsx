@@ -135,8 +135,6 @@ export default function MessageContextMenu(props: propsMsgCtxProps) {
 
     const sendReaction = (reaction: string) => {
         const url = `${Routes.Messages}/${message.id}/react?reaction=${reaction}`;
-        
-        // Проверяем, установлена ли реакция пользователя на данное сообщение
         if (user_ctx.reactions.has(message.id)) {
             const currentUserReaction = user_ctx.reactions.get(message.id);
             if (currentUserReaction === reaction) {
@@ -148,7 +146,7 @@ export default function MessageContextMenu(props: propsMsgCtxProps) {
                 user_ctx.setReactions(updatedReactions);
             }
         }
-    
+        
         fetch(url, {
             method: 'POST',
             headers: {
@@ -156,11 +154,8 @@ export default function MessageContextMenu(props: propsMsgCtxProps) {
             },
         })
         .then(response => response.json())
-        .then(updatedMessage => {
-            // Обновляем сообщение в контексте канала
+        .then((updatedMessage: MessageOBJ) => {
             channel_ctx.UpdateMessage(updatedMessage);
-    
-            // Обновляем реакции пользователя
             const updatedReactions = new Map(user_ctx.reactions);
             updatedReactions.set(message.id, reaction);
             user_ctx.setReactions(updatedReactions);
