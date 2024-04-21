@@ -38,6 +38,12 @@ func GetMessages(ctx *Context) {
 		return
 	}
 
+	// channel, statusCode := ctx.Db.GetChannel(channel_id, &ctx.User)
+	// if statusCode != http.StatusOK {
+	// 	ctx.Res.WriteHeader(statusCode)
+	// 	return
+	// }
+
 	messages_res := []response.Message{}
 	for _, message := range messages {
 		if message.SystemMessage {
@@ -50,6 +56,11 @@ func GetMessages(ctx *Context) {
 			continue
 		}
 		messages_res = append(messages_res, response.NewMessage(&message, response.NewUser(user, 0)))
+		// if channel.Type != 4 {
+		// } else {
+		// 	user := database.User{Username: "gitlab-user"}
+		// 	messages_res = append(messages_res, response.NewMessage(&message, response.NewUser(&user, 0)))
+		// }
 	}
 
 	ctx.WriteJSON(messages_res)
@@ -244,7 +255,7 @@ func DeleteReaction(ctx *Context) {
 	}
 
 	// Возвращаем обновленное сообщение в формате JSON
-	user, _ := ctx.Db.GetUser(userID)
+	user, _ := ctx.Db.GetUser(message.AccountID)
 	resMessage := response.NewMessage(&message, response.NewUser(user, ctx.Conn.GetUserStatus(user.ID)))
 	response, err := json.Marshal(resMessage)
 	if err != nil {
@@ -306,7 +317,8 @@ func CreateReaction(ctx *Context) {
 		return
 	}
 
-	user, _ := ctx.Db.GetUser(ctx.User.ID)
+	// user, _ := ctx.Db.GetUser(ctx.User.ID)
+	user, _ := ctx.Db.GetUser(message.AccountID)
 
 	resMessage := response.NewMessage(&message, response.NewUser(user, ctx.Conn.GetUserStatus(user.ID)))
 

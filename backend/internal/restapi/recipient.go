@@ -35,15 +35,18 @@ func AddRecipient(ctx *Context) {
 
 	channelCollection := ctx.Db.Mongo.Collection("channels")
 
-	channel, statusCode := ctx.Db.GetChannel(channel_id, &ctx.User)
+	// channel, statusCode := ctx.Db.GetChannel(channel_id, &ctx.User)
+	channel, statusCode := ctx.Db.GetChannelWithoutUser(channel_id)
 	if statusCode != http.StatusOK {
 		ctx.Res.WriteHeader(statusCode)
 		return
 	}
 
-	if channel.Type == 1 || channel.OwnerID != ctx.User.ID {
-		ctx.Res.WriteHeader(http.StatusForbidden)
-		return
+	if !(channel.Type == 4 || channel.Type == 5) {
+		if channel.Type == 1 || channel.OwnerID != ctx.User.ID {
+			ctx.Res.WriteHeader(http.StatusForbidden)
+			return
+		}
 	}
 
 	user, statusCode := ctx.Db.GetUser(user_id)
@@ -116,15 +119,18 @@ func RemoveRecipient(ctx *Context) {
 	channelCollection := ctx.Db.Mongo.Collection("channels")
 	bansCollection := ctx.Db.Mongo.Collection("bans")
 
-	channel, statusCode := ctx.Db.GetChannel(channel_id, &ctx.User)
+	// channel, statusCode := ctx.Db.GetChannel(channel_id, &ctx.User)
+	channel, statusCode := ctx.Db.GetChannelWithoutUser(channel_id)
 	if statusCode != http.StatusOK {
 		ctx.Res.WriteHeader(statusCode)
 		return
 	}
 
-	if channel.Type == 1 || channel.OwnerID != ctx.User.ID {
-		ctx.Res.WriteHeader(http.StatusForbidden)
-		return
+	if !(channel.Type == 4 || channel.Type == 5) {
+		if channel.Type == 1 || channel.OwnerID != ctx.User.ID {
+			ctx.Res.WriteHeader(http.StatusForbidden)
+			return
+		}
 	}
 
 	user, statusCode := ctx.Db.GetUser(user_id)

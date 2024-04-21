@@ -11,14 +11,14 @@ export async function GetChannels() {
     return channels;
 }
 
-export async function CreateChannel(name: string, icon: string | ArrayBuffer | null) {
+export async function CreateChannel(name: string, icon: string | ArrayBuffer | null, isNews: boolean = false) {
     const url = Routes.currentUser+"/channels";
     const response = await fetch(url, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ name: name, icon: icon })
+        body: JSON.stringify({ name: name, icon: icon, is_news: isNews })
     })
 
     if (!response.ok) {

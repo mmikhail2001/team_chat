@@ -179,7 +179,7 @@ export default function MessageContextMenu(props: propsMsgCtxProps) {
             {(user_ctx.id === message.author.id || channel?.owner_id === user_ctx.id) && <button className='CtxDelBtn' onClick={() => popup_ctx.open(<DeleteMessage message={message} />)}>Delete Message</button>}
 
             {/* наверное здесь нужно проверять, есть ли у данного сообщения thread_id, если нет, то отправлять запрос на создание */}
-            {(channel?.type === 2 && !message.system_message) && <button className='CtxBtn'
+            {((channel?.type === 2 || channel?.type === 4 || channel?.type === 5) && !message.system_message) && <button className='CtxBtn'
                 onClick={openThread}>Open thread</button>}
 
             <button className='CtxBtn' onClick={() => navigator.clipboard.writeText(props.message.id)}>Copy ID</button>

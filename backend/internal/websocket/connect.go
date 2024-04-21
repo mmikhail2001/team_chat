@@ -21,7 +21,6 @@ func (ws *Ws) ConnectUser() {
 	for _, channel := range channels {
 		recipients := []response.User{}
 		for _, recipient := range channel.Recipients {
-			// почему самому себе не отправляем только в личных чатах?
 			if channel.Type == 1 && recipient == user.ID {
 				continue
 			}
@@ -53,7 +52,6 @@ func (ws *Ws) ConnectUser() {
 		}
 		ws.Conns.SendToUser(relationship.ToUserID, "STATUS_UPDATE", status)
 	}
-
 	// нужно вернуть только те личные каналы, в которых есть хотя бы одно сообщение, и все групповые каналы
 	var personalChatIDs []primitive.ObjectID
 	for _, chat := range res_channels {
@@ -61,23 +59,29 @@ func (ws *Ws) ConnectUser() {
 		personalChatIDs = append(personalChatIDs, chatID)
 	}
 
-	messagesCollection := ws.Db.Mongo.Collection("messages")
-	filter := bson.M{"channel_id": bson.M{"$in": personalChatIDs}}
-	cursor, _ := messagesCollection.Find(context.TODO(), filter)
-	defer cursor.Close(context.Background())
-
-	// map[channel_id]true - если у канала channel_id есть сообщения
 	messagesMap := make(map[string]bool)
-	for cursor.Next(context.Background()) {
-		var message bson.M
-		cursor.Decode(&message)
-		channelID := message["channel_id"].(primitive.ObjectID)
-		messagesMap[channelID.Hex()] = true
+	if len(personalChatIDs) != 0 {
+		messagesCollection := ws.Db.Mongo.Collection("messages")
+		filter := bson.M{"channel_id": bson.M{"$in": personalChatIDs}}
+		cursor, err := messagesCollection.Find(context.TODO(), filter)
+		if err != nil {
+			log.Println("find personalChatIDs err:", err)
+			return
+		}
+		defer cursor.Close(context.Background())
+
+		// map[channel_id]true - если у канала channel_id есть сообщения
+		for cursor.Next(context.Background()) {
+			var message bson.M
+			cursor.Decode(&message)
+			channelID := message["channel_id"].(primitive.ObjectID)
+			messagesMap[channelID.Hex()] = true
+		}
 	}
 
 	var filteredChannels []response.Channel
 	for _, chat := range res_channels {
-		if messagesMap[chat.ID] || chat.Type == 2 || chat.Type == 3 {
+		if messagesMap[chat.ID] || chat.Type == 2 || chat.Type == 3 || chat.Type == 4 || chat.Type == 5 {
 			filteredChannels = append(filteredChannels, chat)
 		}
 	}

@@ -15,7 +15,7 @@ export default function ChannelList({ channel }: { channel: ChannelOBJ }) {
     const parameter = useParams<string>();
 
     let isActive = parameter.id === channel.id;
-    const isChannel = channel.type === 2;
+    const isChannel = channel.type === 2 || channel.type === 4 || channel.type === 5;
 
     let icon: string;
     let name: string;
@@ -48,6 +48,9 @@ export default function ChannelList({ channel }: { channel: ChannelOBJ }) {
                     </div> }
                 </div>
                 <p className="w-28 h-6 overflow-hidden text-ellipsis whitespace-nowrap">{name}</p>
+                <p className="text-gray-400 bg-gray-900 p-1 rounded text-xs ml-auto">
+                    {channel.type === 1 ? "Direct" : channel.type === 2 ? "Group" : channel.type === 4 ? "Bot" : channel.type === 5 ? "News" : ""}
+                </p>
             </div>
         </Link>
     )

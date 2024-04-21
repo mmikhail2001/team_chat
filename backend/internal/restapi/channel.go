@@ -32,7 +32,7 @@ func CreateChannel(ctx *Context) {
 		return
 	}
 
-	channel, statusCode := ctx.Db.CreateChannel(name, icon, recipientID, &ctx.User)
+	channel, statusCode := ctx.Db.CreateChannel(name, icon, recipientID, &ctx.User, request.IsNews)
 	if statusCode != http.StatusOK {
 		ctx.Res.WriteHeader(statusCode)
 		return
@@ -180,6 +180,22 @@ func GetChannels(ctx *Context) {
 			recipients = append(recipients, response.NewUser(recipient, ctx.Conn.GetUserStatus(recipient.ID)))
 		}
 
+		res_channels = append(res_channels, response.NewChannel(&channel, recipients))
+	}
+
+	ctx.WriteJSON(res_channels)
+}
+
+func GetChannelsMailings(ctx *Context) {
+	log.Println("handler GetChannelsMailings")
+	res_channels := []response.Channel{}
+	channels := ctx.Db.GetChannelsMailings()
+	for _, channel := range channels {
+		recipients := []response.User{}
+		for _, recipient := range channel.Recipients {
+			recipient, _ := ctx.Db.GetUser(recipient)
+			recipients = append(recipients, response.NewUser(recipient, ctx.Conn.GetUserStatus(recipient.ID)))
+		}
 		res_channels = append(res_channels, response.NewChannel(&channel, recipients))
 	}
 

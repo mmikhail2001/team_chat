@@ -18,7 +18,7 @@ import (
 )
 
 // TODO:
-// первое сообщение в личное беседе дублируется
+// первое сообщение в личной беседе дублируется
 
 var (
 	HOST           = os.Getenv("SERVER_HOST")
@@ -38,7 +38,7 @@ var (
 	conns   = websocket.NewConnections()
 )
 
-var keycloackHost string = "http://localhost:8080"
+var keycloackHost string = "http://localhost:8090"
 var clientHost string = "http://localhost:3000"
 var realm string = "myrealm"
 var clientID string = "myclient"
@@ -87,6 +87,9 @@ func main() {
 
 	api.HandleFunc("/search", oauthHandler.Authenticated(restapi.Search)).Methods("GET")
 
+	// Webhooks
+	api.HandleFunc("/integrations/gitlab", oauthHandler.Authenticated(restapi.WebhookGitlab)).Methods("POST")
+
 	api.HandleFunc("/channels/{id}", oauthHandler.Authenticated(restapi.GetChannel)).Methods("GET")
 	api.HandleFunc("/channels/{id}", oauthHandler.Authenticated(restapi.EditChannel)).Methods("PATCH")
 	api.HandleFunc("/channels/{id}", oauthHandler.Authenticated(restapi.DeleteChannel)).Methods("DELETE")
@@ -99,7 +102,7 @@ func main() {
 	api.HandleFunc("/channels/{id}/messages/{mid}", oauthHandler.Authenticated(restapi.GetMessage)).Methods("GET")
 	api.HandleFunc("/channels/{id}/messages/{mid}", oauthHandler.Authenticated(restapi.EditMessage)).Methods("PATCH")
 	api.HandleFunc("/channels/{id}/messages/{mid}", oauthHandler.Authenticated(restapi.DeleteMessage)).Methods("DELETE")
-
+	//
 	// Threads
 	api.HandleFunc("/channels/{id}/messages/{mid}", oauthHandler.Authenticated(restapi.CreateThread)).Methods("POST")
 	// Reactions
@@ -123,6 +126,7 @@ func main() {
 	api.HandleFunc("/users/@me", oauthHandler.Authenticated(restapi.GetUser)).Methods("GET")
 	api.HandleFunc("/users/@me", oauthHandler.Authenticated(restapi.EditUser)).Methods("PATCH")
 	api.HandleFunc("/users/@me/channels", oauthHandler.Authenticated(restapi.GetChannels)).Methods("GET")
+	api.HandleFunc("/users/@me/channels/mailings", oauthHandler.Authenticated(restapi.GetChannelsMailings)).Methods("GET")
 	api.HandleFunc("/users/@me/channels", oauthHandler.Authenticated(restapi.CreateChannel)).Methods("POST")
 	// Relationship
 	api.HandleFunc("/users/@me/relationships", oauthHandler.Authenticated(restapi.GetRelationships)).Methods("GET")

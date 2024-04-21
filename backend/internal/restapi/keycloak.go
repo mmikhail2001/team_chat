@@ -96,6 +96,31 @@ type AuthFunction func(ctx *Context)
 
 func (h *Handler) Authenticated(function AuthFunction) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		userAgent := r.Header.Get("User-Agent")
+
+		// TODO: нужно еще токен авторизации от GitLab
+		if strings.Contains(userAgent, "GitLab") {
+			var user database.User
+			usersCollection := h.Db.Mongo.Collection("users")
+
+			err := usersCollection.FindOne(context.Background(), bson.M{"username": "gitlab"}).Decode(&user)
+			if err != nil {
+				log.Println("no user gitlab")
+				w.WriteHeader(http.StatusForbidden)
+				return
+			}
+
+			ctx := Context{
+				Res:  w,
+				Req:  r,
+				Db:   h.Db,
+				User: user,
+				Conn: h.Conn,
+			}
+			function(&ctx)
+			return
+		}
+
 		tokenIDRaw, err := r.Cookie("token_id")
 		if err != nil {
 			w.WriteHeader(http.StatusForbidden)
@@ -176,17 +201,31 @@ func (h *Handler) HandleLoginCallback(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	fmt.Printf("\n\n AccessToken: \n\n %s \n\n", token.AccessToken)
+
 	userInfo, err := h.Provider.UserInfo(context.Background(), oauth2.StaticTokenSource(token))
 	if err != nil {
 		w.WriteHeader(http.StatusForbidden)
 	}
+
+	var userClaims map[string]interface{}
+	err = userInfo.Claims(&userClaims)
+	if err != nil {
+		fmt.Printf("Claims with error: '%v'\n", err)
+		http.Redirect(w, r, "/api/login", http.StatusTemporaryRedirect)
+		return
+	} else {
+		fmt.Printf("\n %#v \n\n", userClaims)
+	}
+
 	subject := userInfo.Subject
 
 	// создание пользователя
 	collectionUser := h.Db.Mongo.Collection("users")
 	currentUser, status := h.Db.GetUser(subject)
 	if status == http.StatusNotFound {
-		newUser := bson.M{"_id": subject, "email": userInfo.Email, "username": strings.Split(userInfo.Email, "@")[0]}
+		// newUser := bson.M{"_id": subject, "email": userInfo.Email, "username": strings.Split(userInfo.Email, "@")[0]}
+		newUser := bson.M{"_id": subject, "email": userInfo.Email, "username": userClaims["name"].(string)}
 		_, err := collectionUser.InsertOne(context.Background(), newUser)
 		if err != nil {
 			log.Println("InsertOne new user")
@@ -233,7 +272,7 @@ func (h *Handler) HandleLoginCallback(w http.ResponseWriter, r *http.Request) {
 		recipientID := otherUser.ID
 		if _, ok := existingChannels[recipientID]; !ok {
 			log.Println("create new channel:", currentUser.Username, "with:", otherUser.Username)
-			newChannel, statusCode := h.Db.CreateChannel("", "", recipientID, currentUser)
+			newChannel, statusCode := h.Db.CreateChannel("", "", recipientID, currentUser, false)
 			if statusCode != http.StatusOK {
 				w.WriteHeader(statusCode)
 				return

@@ -13,7 +13,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func (db *Database) CreateChannel(name string, icon string, recipient_id string, user *User) (*Channel, int) {
+func (db *Database) CreateChannel(name string, icon string, recipient_id string, user *User, isNews bool) (*Channel, int) {
 	channels := db.Mongo.Collection("channels")
 
 	// определять тип чата по пустой строке recipient_id... совсем не читаемо
@@ -51,9 +51,13 @@ func (db *Database) CreateChannel(name string, icon string, recipient_id string,
 
 		return &channel, http.StatusOK
 	} else {
+		var channelType int = 2
+		if isNews {
+			channelType = 5
+		}
 		channel := Channel{
 			ID:      primitive.NewObjectID(),
-			Type:    2,
+			Type:    channelType,
 			Name:    name,
 			OwnerID: user.ID,
 			Recipients: []string{
@@ -227,6 +231,34 @@ func (db *Database) GetChannels(user *User) []Channel {
 		var channel Channel
 		cursor.Decode(&channel)
 		channels = append(channels, channel)
+	}
+
+	return channels
+}
+
+func (db *Database) GetChannelsMailings() []Channel {
+	channelsCollection := db.Mongo.Collection("channels")
+
+	var channels []Channel
+	filter := bson.M{"type": bson.M{"$in": []int{4, 5}}}
+	cursor, err := channelsCollection.Find(context.TODO(), filter)
+	if err != nil {
+		log.Println("GetChannelsMailings: Find: err: ", err)
+		return []Channel{}
+	}
+	defer cursor.Close(context.TODO())
+
+	for cursor.Next(context.TODO()) {
+		var channel Channel
+		if err := cursor.Decode(&channel); err != nil {
+			log.Println("GetChannelsMailings: Decode: err: ", err)
+			continue
+		}
+		channels = append(channels, channel)
+	}
+	if err := cursor.Err(); err != nil {
+		log.Println("GetChannelsMailings: Cursor error: ", err)
+		return []Channel{}
 	}
 
 	return channels

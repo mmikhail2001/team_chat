@@ -6,6 +6,7 @@ import Home from "./pages/home";
 import LoginContainer from "./pages/LoginContainer";
 import Channel from "./pages/channel";
 import Relationships from "./pages/relationships";
+import Mailings from "./pages/mailings";
 import Settings from "./pages/settings";
 import NoPage from "./pages/nopage";
 import HomeDefault from "./pages/HomeDefault";
@@ -53,6 +54,7 @@ function App() {
 								} />
 							</Route>
 							<Route path="relationships" element={<Relationships />} />
+							<Route path="mailings" element={<Mailings />} />
 							<Route path="settings" element={<Settings />} />
 						</Route>
 

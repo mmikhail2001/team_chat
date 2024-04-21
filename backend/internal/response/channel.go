@@ -25,7 +25,7 @@ func NewChannel(channel *database.Channel, recipients []User) Channel {
 		CreatedAt:  channel.CreatedAt,
 		UpdatedAt:  channel.UpdatedAt,
 	}
-	if channel.Type == 2 {
+	if channel.Type == 2 || channel.Type == 4 || channel.Type == 5 {
 		res_channel.Icon = GetIconUrl(channel)
 		res_channel.Name = channel.Name
 		res_channel.OwnerID = channel.OwnerID

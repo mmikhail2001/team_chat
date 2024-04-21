@@ -5,6 +5,7 @@ import Header from './header';
 import { MessageOBJ, ChannelOBJ } from '../../models/models';
 import { ChannelsContext, ChannelContext } from "../../contexts/channelctx";
 import { ThreadContext, ThreadContextOBJ } from "../../contexts/threadcontext";
+import { UserContextOBJ, UserContext } from "../../contexts/usercontext";
 import { BsPlusCircleFill } from 'react-icons/bs';
 import Routes from '../../config';
 import { useParams } from 'react-router-dom';
@@ -19,6 +20,7 @@ function Chat() {
 
 	// Emoji picker https://www.cluemediator.com/how-to-add-emoji-picker-in-the-react
 	const channel_context: ChannelContext = useContext(ChannelsContext);
+	const user_ctx: UserContextOBJ = useContext(UserContext);
 	const thread_context: ThreadContextOBJ = useContext(ThreadContext);
 
 	const [Input_message, setInput_message] = useState('');
@@ -44,7 +46,12 @@ function Chat() {
 		let prevAuthor: string = ""
 		messages.forEach((message, index) => {
 			let date = new Date(message.created_at * 1000).toLocaleDateString();
-			let short = prevAuthor === message.author.id;
+			let short;
+			if (channel.type == 4) {
+				short = false;
+			} else {
+				short = prevAuthor === message.author.id;
+			}
 			prevAuthor = message.author.id;
 
 			const isLastMessage = index === messages.length - 1;
@@ -59,11 +66,14 @@ function Chat() {
 				preDate = date;
 				short = false;
 			}
-			messagesList.push(
-				<div ref={isLastMessage ? messageElement : null}>
-					<Message key={message.id} message={message} short={short} />
-				</div>
-				)
+			// if, чтобы убрать системные сообщения на новостных каналах и в чат ботах
+			if (!(message.system_message && (channel.type == 4 || channel.type == 5))) {
+				messagesList.push(
+					<div ref={isLastMessage ? messageElement : null}>
+						<Message key={message.id} message={message} short={short} />
+					</div>
+					)
+			}
 			// messagesList.push(<Message key={message.id} isRef={isLastMessage} message={message} short={short} />)
 		});
 
@@ -173,15 +183,19 @@ function Chat() {
 					<div className="mb-16 flex-col-reverse overflow-x-hidden overflow-y-scroll" ref={messagesContainerRef}>
 						{MessageElement}
 					</div>
-					<div className="h-16 absolute bottom-0 w-full flex items-center justify-evenly border-t border-zinc-800">
-						{ hasFile && <div className='absolute bottom-16 right-0 h-40 w-full flex items-center rounded-t-xl bg-black border-t border-r border-l border-zinc-800'>{fileJSX}</div> } 
-						<input type="file" ref={file_input} name="filename" hidden onChange={onFileChange} />
-						<BsPlusCircleFill size={26} onClick={() => file_input.current.click()} />
-						<input className='w-[85%] h-8 rounded-md bg-zinc-800 px-4' type="text" placeholder="Type a message..." onKeyPress={updateChat} value={Input_message} onChange={onInputChange} />
-					</div>
+					{
+						(channel.type == 1 || channel.type == 2 || (channel.type == 5 && channel.owner_id == user_ctx.id )) && 
+						<div className="h-16 absolute bottom-0 w-full flex items-center justify-evenly border-t border-zinc-800">
+							{ hasFile && <div className='absolute bottom-16 right-0 h-40 w-full flex items-center rounded-t-xl bg-black border-t border-r border-l border-zinc-800'>{fileJSX}</div> } 
+							<input type="file" ref={file_input} name="filename" hidden onChange={onFileChange} />
+							<BsPlusCircleFill size={26} onClick={() => file_input.current.click()} />
+							<input className='w-[85%] h-8 rounded-md bg-zinc-800 px-4' type="text" placeholder="Type a message..." onKeyPress={updateChat} value={Input_message} onChange={onInputChange} />
+						</div>
+					}
+
 				</div>
 				{ thread_context.threadShow && <Thread/> }
-				{ channel.type === 2 && showRecipients && <Recipients channel={channel} /> }
+				{ (channel.type === 2 || channel.type === 4 || channel.type === 5) && showRecipients && <Recipients channel={channel} /> }
 			</div>
 		</div>
 	);

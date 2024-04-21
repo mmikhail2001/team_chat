@@ -117,10 +117,12 @@ function SideBar() {
 	}
 
 	return (
-		<div className={`h-full w-full lg:w-64 ${location.pathname !== "/channels" ? "hidden" : "block"} overflow-y-scroll lg:block md:border-r border-zinc-800`}>
+		<div className={`h-full w-full lg:w-64 ${location.pathname !== "/channels" ? "hidden" : "block"} 
+			overflow-y-scroll lg:block md:border-r border-zinc-800`}>
 			<SideBarHeader />
 			<div className="flex items-center">
-				<input className='h-6 w-44 my-3 mx-2 px-2 border-none rounded bg-zinc-800 focus:outline-none' type="text" placeholder="Search" ref={searchChats} onChange={handleSearchChange} value={searchValue} />
+				<input className='h-6 w-44 my-3 mx-2 px-2 border-none rounded bg-zinc-800 focus:outline-none' 
+					type="text" placeholder="Search" ref={searchChats} onChange={handleSearchChange} value={searchValue} />
 				{searchValue && <IoClose
 					className="text-white cursor-pointer"
 					onClick={cancelSearch}
