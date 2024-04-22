@@ -7,13 +7,15 @@ import (
 )
 
 type User struct {
-	ID         string `bson:"_id"`
-	Avatar     Avatar `bson:"avatar"`
-	Username   string `bson:"username"`
-	Email      string `bson:"email"`
-	Password   []byte `bson:"password"`
-	CreatedAt  int64  `bson:"created_at"`
-	LastLogout int64  `bson:"last_logout"`
+	ID         string               `bson:"_id"`
+	Avatar     Avatar               `bson:"avatar"`
+	Username   string               `bson:"username"`
+	Email      string               `bson:"email"`
+	Password   []byte               `bson:"password"`
+	CreatedAt  int64                `bson:"created_at"`
+	LastLogout int64                `bson:"last_logout"`
+	Roles      []primitive.ObjectID `bson:"roles"`
+	IsGuest    bool                 `bson:"is_guest"`
 }
 
 type Avatar struct {
@@ -46,6 +48,12 @@ type Icon struct {
 	Icon string             `bson:"icon"`
 	Type string             `bson:"type"`
 	Ext  string             `bson:"ext"`
+}
+
+type Role struct {
+	ID       primitive.ObjectID   `bson:"_id"`
+	Name     string               `bson:"name"`
+	Channels []primitive.ObjectID `bson:"channels"`
 }
 
 type Message struct {

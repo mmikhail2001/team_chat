@@ -25,6 +25,7 @@ export type UserOBJ = {
     status: number
     created_at: number
     reactions: ReactionMessageOBJ[]
+    is_guest: boolean
 }
 
 export type ReactionMessageOBJ = {

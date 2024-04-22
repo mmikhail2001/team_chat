@@ -1,4 +1,5 @@
 import { ChannelContext, ChannelsContext } from '../contexts/channelctx';
+import { UserContextOBJ, UserContext } from '../contexts/usercontext';
 import { useContext, useEffect, useState, useRef } from 'react';
 import { ChannelOBJ, UserOBJ } from '../models/models';
 import ChannelList from './channel_list';
@@ -10,6 +11,8 @@ import { IoClose } from 'react-icons/io5';
 function SideBar() {
 	const [channels_element, setChannels_element] = useState<JSX.Element[]>([])
 	const channel_context: ChannelContext = useContext(ChannelsContext);
+	const user_ctx:UserContextOBJ = useContext(UserContext);
+
 	const location = useLocation()
 
 	const searchChats = useRef<HTMLInputElement>(undefined!);
@@ -56,6 +59,7 @@ function SideBar() {
 		}, [channel_context.channels, channel_context.messages])
 
 	function handleSearchChange(event: React.ChangeEvent<HTMLInputElement>) {
+		console.log("user_ctx.is_guest ============", user_ctx.is_guest)
 		const { value } = event.target;
 		setSearchValue(value);
 		if (value.trim() === '') {
@@ -121,15 +125,23 @@ function SideBar() {
 			overflow-y-scroll lg:block md:border-r border-zinc-800`}>
 			<SideBarHeader />
 			<div className="flex items-center">
-				<input className='h-6 w-44 my-3 mx-2 px-2 border-none rounded bg-zinc-800 focus:outline-none' 
+				{!user_ctx.is_guest && 
+					<input className='h-6 w-44 my-3 mx-5 px-2 border-none rounded bg-zinc-800 focus:outline-none' 
 					type="text" placeholder="Search" ref={searchChats} onChange={handleSearchChange} value={searchValue} />
+				}
 				{searchValue && <IoClose
 					className="text-white cursor-pointer"
 					onClick={cancelSearch}
 					size="20"
 					style={{ marginLeft: '-7px', marginTop: '2px' }}
-				/>}
+					/>}
 			</div>
+			
+			{!isSearchActive ? (
+				<div className="px-5 py-3 my-4 bg-gray-900 text-gray-500">My Chats</div>
+			) : (
+				<div className="px-5 py-3 my-4 bg-gray-900 text-gray-500">Search Results</div>
+			)}
 			{isSearchActive ? searchResults : channels_element}
 		</div>
 	);

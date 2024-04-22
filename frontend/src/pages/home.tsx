@@ -83,6 +83,7 @@ function Home() {
 					user_ctx.setId(ready.user.id);
 					user_ctx.setUsername(ready.user.username);
 					user_ctx.setAvatar(ready.user.avatar);
+					user_ctx.setIsGuest(ready.user.is_guest);
 					ready.channels.forEach((channel: ChannelOBJ) => {
 						channel_context.setChannel(prev => new Map(prev.set(channel.id, channel)));
 						// const userReactions = new Map(user_ctx.reactions);

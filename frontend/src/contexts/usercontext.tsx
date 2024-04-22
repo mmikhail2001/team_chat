@@ -11,9 +11,11 @@ export type UserContextOBJ = {
     id: string;
     username: string;
     avatar: string;
+    is_guest: boolean;
     setId:React.Dispatch<React.SetStateAction<string>>;
     setUsername:React.Dispatch<React.SetStateAction<string>>;
     setAvatar:React.Dispatch<React.SetStateAction<string>>;
+    setIsGuest:React.Dispatch<React.SetStateAction<boolean>>;
     relationships: Map<String,Relationship>;
 	setRelationships: React.Dispatch<React.SetStateAction<Map<String, Relationship>>>;
     deleterelationship: (key: String) => void;
@@ -29,6 +31,7 @@ function UserCTX({ children }: { children: React.ReactChild }) {
     const [id, setId] = useState<string>("");
     const [username, setUsername] = useState<string>("");
     const [avatar, setAvatar] = useState<string>("");
+    const [is_guest, setIsGuest] = useState<boolean>("");
 	const [relationships, setRelationships, deleterelationship] = useMap<Relationship>(new Map<String,Relationship>());
 	const [reactions, setReactions] = useState(new Map<String,String>());
 
@@ -67,9 +70,11 @@ function UserCTX({ children }: { children: React.ReactChild }) {
         id: id,
         username: username,
         avatar: avatar,
+        is_guest: is_guest,
         setId: setId,
         setUsername: setUsername,
         setAvatar: setAvatar,
+        setIsGuest: setIsGuest,
         relationships: relationships,
         setRelationships: setRelationships,
         deleterelationship: deleterelationship,

@@ -13,6 +13,7 @@ type User struct {
 	Status    int               `json:"status"`
 	CreatedAt int64             `json:"created_at"`
 	Reactions []ReactionMessage `json:"reactions"`
+	IsGuest   bool              `json:"is_guest"`
 }
 
 type ReactionMessage struct {
@@ -33,6 +34,7 @@ func NewUser(user *database.User, status int) User {
 		Avatar:    GetUrl(user),
 		Username:  user.Username,
 		Status:    status,
+		IsGuest:   user.IsGuest,
 		CreatedAt: user.CreatedAt,
 	}
 }

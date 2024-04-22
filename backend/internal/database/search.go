@@ -11,7 +11,11 @@ import (
 func (db *Database) SearchGroupChannels(query string, currentUserID string) ([]Channel, error) {
 	var channels []Channel
 
-	groupChatsFilter := bson.M{"type": 2, "name": bson.M{"$regex": query, "$options": "i"}}
+	groupChatsFilter := bson.M{
+		"type":       2,
+		"name":       bson.M{"$regex": query, "$options": "i"},
+		"recipients": bson.M{"$elemMatch": bson.M{"$eq": currentUserID}},
+	}
 	cursor, err := db.Mongo.Collection("channels").Find(context.TODO(), groupChatsFilter)
 	if err != nil {
 		return nil, err

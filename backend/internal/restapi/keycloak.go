@@ -16,6 +16,7 @@ import (
 	oidc "github.com/coreos/go-oidc"
 	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"golang.org/x/oauth2"
 )
 
@@ -220,12 +221,50 @@ func (h *Handler) HandleLoginCallback(w http.ResponseWriter, r *http.Request) {
 
 	subject := userInfo.Subject
 
+	var roles []database.Role
+	cursorRoles, err := h.Db.Mongo.Collection("roles").Find(context.Background(), bson.M{})
+	if err != nil {
+		log.Println("Error fetching roles:", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	defer cursorRoles.Close(context.Background())
+
+	if err := cursorRoles.All(context.Background(), &roles); err != nil {
+		log.Println("Error decoding roles:", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	var userRolesIDs []primitive.ObjectID
+	var userRoles []database.Role
+	isGuest := false
+	for _, group := range userClaims["groups"].([]interface{}) {
+		groupName := group.(string)
+		for _, role := range roles {
+			if role.Name == groupName {
+				if role.Name == "guest" {
+					isGuest = true
+				}
+				userRolesIDs = append(userRolesIDs, role.ID)
+				userRoles = append(userRoles, role)
+			}
+		}
+	}
+
+	// TODO:
+
 	// создание пользователя
 	collectionUser := h.Db.Mongo.Collection("users")
 	currentUser, status := h.Db.GetUser(subject)
 	if status == http.StatusNotFound {
-		// newUser := bson.M{"_id": subject, "email": userInfo.Email, "username": strings.Split(userInfo.Email, "@")[0]}
-		newUser := bson.M{"_id": subject, "email": userInfo.Email, "username": userClaims["name"].(string)}
+		newUser := bson.M{
+			"_id":      subject,
+			"email":    userInfo.Email,
+			"username": userClaims["name"].(string),
+			"roles":    userRolesIDs,
+			"is_guest": isGuest,
+		}
 		_, err := collectionUser.InsertOne(context.Background(), newUser)
 		if err != nil {
 			log.Println("InsertOne new user")
@@ -237,6 +276,21 @@ func (h *Handler) HandleLoginCallback(w http.ResponseWriter, r *http.Request) {
 			log.Println("GetUser new user")
 			w.WriteHeader(http.StatusInternalServerError)
 			return
+		}
+		collectionChannels := h.Db.Mongo.Collection("channels")
+		for _, role := range userRoles {
+			log.Printf("\n >>> %s --- %#v \n\n", role.Name, role.Channels)
+			log.Printf("\n <<< %s %s", currentUser.Username)
+			for _, channelID := range role.Channels {
+				filter := bson.M{"_id": channelID}
+				update := bson.M{"$addToSet": bson.M{"recipients": currentUser.ID}}
+				_, err := collectionChannels.UpdateOne(context.Background(), filter, update)
+				if err != nil {
+					log.Println("Error updating channel recipients:", err)
+					w.WriteHeader(http.StatusInternalServerError)
+					return
+				}
+			}
 		}
 	}
 
@@ -254,7 +308,7 @@ func (h *Handler) HandleLoginCallback(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	cursorUsers, err := collectionUser.Find(context.Background(), bson.M{"_id": bson.M{"$ne": subject}})
+	cursorUsers, err := collectionUser.Find(context.Background(), bson.M{"_id": bson.M{"$ne": subject}, "username": bson.M{"$ne": "gitlab"}})
 	if err != nil {
 		log.Println("Find user except new")
 		w.WriteHeader(http.StatusInternalServerError)
