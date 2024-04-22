@@ -132,11 +132,11 @@ function Settings() {
             </div>
             <div className='flex flex-col h-full w-full items-center overflow-y-scroll'>
                 <SettingsItem title='Profile'>
-                    <div className="relative flex items-center justify-center h-32 w-32">
-                        <img onClick={() => avatar_input.current.click()} src={user_ctx.avatar} onError={setDefaultAvatar} className="h-24 w-24 rounded-xl bg-zinc-900 cursor-pointer p-0 m-2 border-slate-300 border-2 border-dashed" ref={avatar_image} alt="icon" />
-                        <HiCamera size={64} onClick={() => avatar_input.current.click()} className="absolute self-center justify-self-center text-white opacity-70 cursor-pointer" />
-                        <input type="file" ref={avatar_input} name="filename" hidden onChange={onIconChange} accept="image/*"></input>
-                    </div>
+                <div className="relative flex items-center justify-center h-32 w-32">
+                    <img onClick={() => avatar_input.current.click()} src={user_ctx.avatar} onError={setDefaultAvatar} className="h-24 w-24 rounded-xl bg-zinc-900 cursor-pointer p-0 m-2 border-slate-300 border-2 border-dashed" style={{ objectFit: 'cover', objectPosition: 'center' }} ref={avatar_image} alt="icon" />
+                    <HiCamera size={64} onClick={() => avatar_input.current.click()} className="absolute self-center justify-self-center text-white opacity-70 cursor-pointer" />
+                    <input type="file" ref={avatar_input} name="filename" hidden onChange={onIconChange} accept="image/*"></input>
+                </div>
                     <input className="h-8 w-4/5 cursor-not-allowed rounded my-1 px-2 bg-zinc-700 text-gray-400" type="text" disabled value={user_ctx.username} onClick={() => alert("Username changing is not supported!")} />
                     <button className='w-24 h-10 bg-green-700 rounded hover:bg-green-800' onClick={avatar}>Save</button>
                     <div className="flex items-center space-x-2">

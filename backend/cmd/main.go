@@ -95,6 +95,7 @@ func main() {
 	api.HandleFunc("/channels/{id}", oauthHandler.Authenticated(restapi.DeleteChannel)).Methods("DELETE")
 	// Recipients
 	api.HandleFunc("/channels/{id}/recipients/{uid}", oauthHandler.Authenticated(restapi.AddRecipient)).Methods("PUT")
+	api.HandleFunc("/channels/{id}/roles/{role}", oauthHandler.Authenticated(restapi.AddRoleToChannel)).Methods("PUT")
 	api.HandleFunc("/channels/{id}/recipients/{uid}", oauthHandler.Authenticated(restapi.RemoveRecipient)).Methods("DELETE")
 	// Messages
 	api.HandleFunc("/channels/{id}/messages", oauthHandler.Authenticated(restapi.GetMessages)).Methods("GET")

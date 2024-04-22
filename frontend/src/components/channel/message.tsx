@@ -222,9 +222,11 @@ function Message({ message, short }: { message: MessageOBJ, short: boolean }) {
                     {(!message.system_message && !short) && <span className="text-xl">{message.author.username}</span>}
                     {!edit && 
                         <div className="text-neutral-400">
-                        <div className={user_ctx.id === message.author.id ? "bg-gray-800 p-2 rounded-lg inline-block" : "bg-gray-700 bg-opacity-50 p-2 rounded-lg inline-block"}>
-                            {message.content}
-                        </div>
+                        { message.content != "" &&
+                            <div className={user_ctx.id === message.author.id ? "bg-gray-800 mb-3 p-2 rounded-lg inline-block" : "bg-gray-700 mb-3 bg-opacity-50 p-2 rounded-lg inline-block"}>
+                                {message.content}
+                            </div>
+                        }       
                       </div>
                         // <span className="text-neutral-400 rounded-lg bg-gray-800 bg-opacity-50 p-2 inline-block">{message.content}</span>
                     }

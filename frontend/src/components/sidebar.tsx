@@ -121,7 +121,7 @@ function SideBar() {
 	}
 
 	return (
-		<div className={`h-full w-full lg:w-64 ${location.pathname !== "/channels" ? "hidden" : "block"} 
+		<div className={`h-full w-96 ${location.pathname !== "/channels" ? "hidden" : "block"} 
 			overflow-y-scroll lg:block md:border-r border-zinc-800`}>
 			<SideBarHeader />
 			<div className="flex items-center">

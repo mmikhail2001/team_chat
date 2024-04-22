@@ -11,7 +11,7 @@ import ChannelContextMenu from "../contextmenu/channel_context_menu";
 // ведь это не список, а один канал...
 // или под лист имеется в виду "лист дерева" ......
 export default function ChannelList({ channel }: { channel: ChannelOBJ }) {
-    const user_ctx:UserContextOBJ = useContext(UserContext);
+    const user_ctx: UserContextOBJ = useContext(UserContext);
     const parameter = useParams<string>();
 
     let isActive = parameter.id === channel.id;
@@ -21,7 +21,7 @@ export default function ChannelList({ channel }: { channel: ChannelOBJ }) {
     let name: string;
     let alt: string;
     let defaultIcon: (event: React.SyntheticEvent<HTMLImageElement, Event>) => void;
-    
+
     if (isChannel) {
         icon = channel.icon;
         name = channel.name;
@@ -37,15 +37,15 @@ export default function ChannelList({ channel }: { channel: ChannelOBJ }) {
 
     return (
         <Link to={`/channels/${channel.id}`} className="linktag" onContextMenu={(event) => {
-                event.preventDefault();
-                ctx_menu.open(<ChannelContextMenu x={event.clientX} y={event.clientY} channel={channel} />);
-            }}>
+            event.preventDefault();
+            ctx_menu.open(<ChannelContextMenu x={event.clientX} y={event.clientY} channel={channel} />);
+        }}>
             <div className={`w-full h-12 px-2 mt-2 flex items-center cursor-pointer rounded ${isActive && 'bg-zinc-800'} hover:bg-zinc-900`}>
                 <div className='relative h-10 w-10 mx-4'>
-                    <img className='rounded-xl h-10 w-10 bg-zinc-900' src={icon} onError={defaultIcon} alt={alt} />
-                    { !isChannel && <div className='absolute right-0 bg-black rounded-full bottom-0'>
+                    <img className='rounded-full h-10 w-10 bg-zinc-900' style={{ objectFit: 'cover', objectPosition: 'center' }} src={icon} onError={defaultIcon} alt={alt} />
+                    {!isChannel && <div className='absolute right-0 bg-black rounded-full bottom-0'>
                         {channel.recipients[0].status === 1 ? <RxDotFilled size={20} className="text-green-600" /> : <RxDot size={20} className="text-gray-400" />}
-                    </div> }
+                    </div>}
                 </div>
                 <p className="w-28 h-6 overflow-hidden text-ellipsis whitespace-nowrap">{name}</p>
                 <p className="text-gray-400 bg-gray-900 p-1 rounded text-xs ml-auto">

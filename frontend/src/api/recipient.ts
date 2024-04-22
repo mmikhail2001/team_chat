@@ -6,6 +6,12 @@ export async function AddRecipient(channel_id: string, recipient_id: string) {
     return response;
 }
 
+export async function AddRoleToChannel(channel_id: string, role: string) {
+    const url = Routes.Channels+"/"+channel_id+"/roles/"+role;
+    const response = await fetch(url, { method: "PUT" })
+    return response;
+}
+
 export async function RemoveRecipient(channel_id: string, recipient_id: string, reason: string, isBan: boolean) {
     const url = Routes.Channels+"/"+channel_id+"/recipients/"+recipient_id;
     const response = await fetch(url, {

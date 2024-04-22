@@ -31,12 +31,13 @@ export default function MemberContextMenu(props:propsMsgCtxProps) {
 
     function Message() {
         // TODO: копи паста, такое уже было
-        GetDMChannel(relationship_obj.id).then(response => {
+        // GetDMChannel(relationship_obj.id).then(response => {
+        GetDMChannel(props.member.id).then(response => {
           if (response.status === 200) {
             response.json().then(dm_channel => {
-              if (!channel_ctx.channels.has(dm_channel.id)) {
+              if (!channel_context.channels.has(dm_channel.id)) {
                 let channel: ChannelOBJ = dm_channel;
-                channel_ctx.setChannel(prevChannels => new Map(prevChannels.set(channel.id, channel)));
+                channel_context.setChannel(prevChannels => new Map(prevChannels.set(channel.id, channel)));
               }
               navigate(`/channels/${dm_channel.id}`);
             })
@@ -73,14 +74,14 @@ export default function MemberContextMenu(props:propsMsgCtxProps) {
 
     return (
         <div className='ContextMenu' style={style}>
-            { props.member.id !== user_ctx.id && <button className='CtxBtn' onClick={Message}>Message</button> }
-            { props.member.id !== user_ctx.id && isFriend === 0 && <button className='CtxBtn' onClick={() => RelationshipToFriend(props.member.id)}>Add Friend</button> }
-            { props.member.id !== user_ctx.id && isFriend === 3 && <button className='CtxBtn' onClick={() => RelationshipToFriend(props.member.id)}>Accept Request</button> }
-            { props.member.id !== user_ctx.id && isFriend === 3 && <button className='CtxDelBtn' onClick={deleteFriend}>Decline Request</button> }
-            { props.member.id !== user_ctx.id && isFriend === 4 && <button className='CtxDelBtn' onClick={deleteFriend}>Cancel Request</button> }
-            { props.member.id !== user_ctx.id && isFriend === 1 && <button className='CtxDelBtn' onClick={deleteFriend}>Remove Friend</button> }
-            { channel.owner_id === user_ctx.id && props.member.id !== user_ctx.id && <button className='CtxDelBtn' onClick={() =>{ handleKickOrBan(false) }}>Kick {props.member.username}</button> }
-            { channel.owner_id === user_ctx.id && props.member.id !== user_ctx.id && <button className='CtxDelBtn' onClick={() =>{ handleKickOrBan(true) }}>Ban {props.member.username}</button> }
+            { !user_ctx.is_guest && props.member.id !== user_ctx.id && <button className='CtxBtn' onClick={Message}>Message</button> }
+            {/* { props.member.id !== user_ctx.id && isFriend === 0 && <button className='CtxBtn' onClick={() => RelationshipToFriend(props.member.id)}>Add Friend</button> } */}
+            {/* { props.member.id !== user_ctx.id && isFriend === 3 && <button className='CtxBtn' onClick={() => RelationshipToFriend(props.member.id)}>Accept Request</button> } */}
+            {/* { props.member.id !== user_ctx.id && isFriend === 3 && <button className='CtxDelBtn' onClick={deleteFriend}>Decline Request</button> } */}
+            {/* { props.member.id !== user_ctx.id && isFriend === 4 && <button className='CtxDelBtn' onClick={deleteFriend}>Cancel Request</button> } */}
+            {/* { props.member.id !== user_ctx.id && isFriend === 1 && <button className='CtxDelBtn' onClick={deleteFriend}>Remove Friend</button> } */}
+            { !user_ctx.is_guest && channel.owner_id === user_ctx.id && props.member.id !== user_ctx.id && <button className='CtxDelBtn' onClick={() =>{ handleKickOrBan(false) }}>Kick {props.member.username}</button> }
+            { !user_ctx.is_guest && channel.owner_id === user_ctx.id && props.member.id !== user_ctx.id && <button className='CtxDelBtn' onClick={() =>{ handleKickOrBan(true) }}>Ban {props.member.username}</button> }
             <button className='CtxBtn' onClick={() => {navigator.clipboard.writeText(props.member.id)}}>Copy ID</button>
         </div>
     )

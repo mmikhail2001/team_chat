@@ -78,10 +78,10 @@ export default function ChannelContextMenu(props: propsChannelCtxProps) {
             { props.channel.type === 2 && props.channel.owner_id === user_ctx.id && <button className='CtxBtn' onClick={() => popup_ctx.open(<EditChannel channel={props.channel} />)}>Edit Channel</button> }
             { props.channel.type === 2 && <button className='CtxDelBtn' onClick={() => popup_ctx.open(<DeleteChannel channel={props.channel} />) }>Leave Channel</button> }
 
-            { props.channel.type === 1 && relationshipStatus === 0 && <button className='CtxBtn' onClick={relationshipToFriend}>Add Friend</button> }
-            { props.channel.type === 1 && relationshipStatus === 3 && <button className='CtxDelBtn' onClick={relationshipToDefault}>Cancel Request</button> }
-            { props.channel.type === 1 && relationshipStatus === 4 && <button className='CtxDelBtn' onClick={relationshipToDefault}>Decline Request</button> }
-            { props.channel.type === 1 && relationshipStatus === 1 && <button className='CtxDelBtn' onClick={relationshipToDefault}>Remove Friend</button> }
+            {/* { props.channel.type === 1 && relationshipStatus === 0 && <button className='CtxBtn' onClick={relationshipToFriend}>Add Friend</button> } */}
+            {/* { props.channel.type === 1 && relationshipStatus === 3 && <button className='CtxDelBtn' onClick={relationshipToDefault}>Cancel Request</button> } */}
+            {/* { props.channel.type === 1 && relationshipStatus === 4 && <button className='CtxDelBtn' onClick={relationshipToDefault}>Decline Request</button> } */}
+            {/* { props.channel.type === 1 && relationshipStatus === 1 && <button className='CtxDelBtn' onClick={relationshipToDefault}>Remove Friend</button> } */}
             { props.channel.type === 1 && relationshipStatus !== 2 && <button className='CtxDelBtn' onClick={relationshipToBlock}>Block User</button> }
             { props.channel.type === 1 && relationshipStatus === 2 && <button className='CtxBtn' onClick={relationshipToDefault}>Unblock User</button> }
             <button className='CtxBtn' onClick={() => {navigator.clipboard.writeText(props.channel.id)}}>Copy ID</button>

@@ -44,7 +44,7 @@ function Mailings() {
 				{mailings.map((mailing: ChannelOBJ) => (
 					<div key={mailing.id} className="my-10 bg-gray-800 rounded-lg p-4 flex items-center justify-between">
 						<div className="flex items-center">
-							<img className="w-16 h-16 rounded-full mr-4" src={mailing.icon} />
+							<img className="w-16 h-16 rounded-full mr-4" src={mailing.icon} style={{ objectFit: 'cover', objectPosition: 'center' }} />
 							<h2 className="text-lg font-semibold">{mailing.name}</h2>
 						</div>
 						<button
