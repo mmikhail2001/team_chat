@@ -45,9 +45,33 @@
   "failureFactor" : 30,
   "roles" : {
     "realm" : [ {
+      "id" : "2e88b138-0e98-4c48-bf15-d7d9e94ec08d",
+      "name" : "general",
+      "description" : "",
+      "composite" : false,
+      "clientRole" : false,
+      "containerId" : "7c9d5875-e6ab-48c4-b272-354c2f947488",
+      "attributes" : { }
+    }, {
       "id" : "8bdf2f08-e37a-4915-85fc-aedb90ef61e1",
       "name" : "offline_access",
       "description" : "${role_offline-access}",
+      "composite" : false,
+      "clientRole" : false,
+      "containerId" : "7c9d5875-e6ab-48c4-b272-354c2f947488",
+      "attributes" : { }
+    }, {
+      "id" : "da95b072-149d-48de-8e06-8b6ae6a5c347",
+      "name" : "developers",
+      "description" : "",
+      "composite" : false,
+      "clientRole" : false,
+      "containerId" : "7c9d5875-e6ab-48c4-b272-354c2f947488",
+      "attributes" : { }
+    }, {
+      "id" : "3a09aac2-90c6-447c-8884-0394c6965f9d",
+      "name" : "guest",
+      "description" : "",
       "composite" : false,
       "clientRole" : false,
       "containerId" : "7c9d5875-e6ab-48c4-b272-354c2f947488",
@@ -70,6 +94,25 @@
       "id" : "0d3a946d-7746-441c-bc5f-9ed9e4de1e6c",
       "name" : "uma_authorization",
       "description" : "${role_uma_authorization}",
+      "composite" : false,
+      "clientRole" : false,
+      "containerId" : "7c9d5875-e6ab-48c4-b272-354c2f947488",
+      "attributes" : { }
+    }, {
+      "id" : "c05cb75a-f5b5-408a-9224-bf97c58215af",
+      "name" : "admin",
+      "description" : "",
+      "composite" : true,
+      "composites" : {
+        "realm" : [ "general", "developers", "managers" ]
+      },
+      "clientRole" : false,
+      "containerId" : "7c9d5875-e6ab-48c4-b272-354c2f947488",
+      "attributes" : { }
+    }, {
+      "id" : "d774a38f-4190-4909-9a38-58be773ec827",
+      "name" : "managers",
+      "description" : "",
       "composite" : false,
       "clientRole" : false,
       "containerId" : "7c9d5875-e6ab-48c4-b272-354c2f947488",
@@ -334,7 +377,15 @@
       } ]
     }
   },
-  "groups" : [ ],
+  "groups" : [ {
+    "id" : "9ac64b90-1d99-4d5c-8cc0-1af38fc12082",
+    "name" : "devs",
+    "path" : "/devs",
+    "subGroups" : [ ],
+    "attributes" : { },
+    "realmRoles" : [ ],
+    "clientRoles" : { }
+  } ],
   "defaultRole" : {
     "id" : "e6f3adc1-0756-4aa6-b0fb-0677ed23e825",
     "name" : "default-roles-myrealm",
@@ -376,6 +427,51 @@
   "webAuthnPolicyPasswordlessAcceptableAaguids" : [ ],
   "webAuthnPolicyPasswordlessExtraOrigins" : [ ],
   "users" : [ {
+    "id" : "1e82445a-8e05-47eb-bd5e-f6b2ecc94fe9",
+    "createdTimestamp" : 1713734172893,
+    "username" : "administrator",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : false,
+    "firstName" : "artur",
+    "lastName" : "petrov",
+    "email" : "administrator@mail.ru",
+    "credentials" : [ {
+      "id" : "798bb32c-0b56-411c-aa2c-32c36638a50f",
+      "type" : "password",
+      "createdDate" : 1713734571633,
+      "secretData" : "{\"value\":\"Bain/pwdntodq1rk6Cs2XRsQbpw8s9roVZ/vzkT17Q8=\",\"salt\":\"63ResW1HlBYoEuw2vPWncw==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "default-roles-myrealm", "admin" ],
+    "notBefore" : 0,
+    "groups" : [ ]
+  }, {
+    "id" : "f3abc234-35ea-4310-aa32-61c901b91938",
+    "createdTimestamp" : 1713771626271,
+    "username" : "artem",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : false,
+    "firstName" : "artem",
+    "lastName" : "romanov",
+    "email" : "artem@mail.ru",
+    "credentials" : [ {
+      "id" : "1e924f65-12c9-4e41-91ad-1335a7ace6ca",
+      "type" : "password",
+      "userLabel" : "My password",
+      "createdDate" : 1713771634630,
+      "secretData" : "{\"value\":\"l3HppPEahsSf1ua6aRjrknI8gLbCC4q+aIzCTFWTb8c=\",\"salt\":\"Cqlf36Wmggyde0nqnn5o1w==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ "UPDATE_PASSWORD" ],
+    "realmRoles" : [ "general", "default-roles-myrealm", "managers" ],
+    "notBefore" : 0,
+    "groups" : [ ]
+  }, {
     "id" : "fe1d285b-2011-4907-b456-25447895c727",
     "createdTimestamp" : 1713725268334,
     "username" : "misha",
@@ -383,8 +479,11 @@
     "totp" : false,
     "emailVerified" : false,
     "firstName" : "misha",
-    "lastName" : "misha",
+    "lastName" : "myadelets",
     "email" : "misha@mail.ru",
+    "attributes" : {
+      "age" : [ "22" ]
+    },
     "credentials" : [ {
       "id" : "2cce4a8a-58d6-44db-abb1-8b76000c4b11",
       "type" : "password",
@@ -395,7 +494,29 @@
     } ],
     "disableableCredentialTypes" : [ ],
     "requiredActions" : [ ],
-    "realmRoles" : [ "default-roles-myrealm" ],
+    "realmRoles" : [ "general", "developers", "uma_authorization" ],
+    "notBefore" : 0,
+    "groups" : [ "/devs" ]
+  }, {
+    "id" : "cf01778b-2d2d-4707-b904-b319303c7c3a",
+    "createdTimestamp" : 1713771708516,
+    "username" : "petr",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : false,
+    "firstName" : "petr",
+    "lastName" : "dorsky",
+    "email" : "petr@mail.ru",
+    "credentials" : [ {
+      "id" : "22a6080f-75f9-4fea-9b0d-ae363d27a5ad",
+      "type" : "password",
+      "createdDate" : 1713773109999,
+      "secretData" : "{\"value\":\"KQeqgAOVR1btL7E3l1THLj/l22yeYzhqIHFznu13wFA=\",\"salt\":\"pHhu3w3DnLBBjVmPKNKQsw==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "guest", "default-roles-myrealm" ],
     "notBefore" : 0,
     "groups" : [ ]
   }, {
@@ -418,7 +539,7 @@
     } ],
     "disableableCredentialTypes" : [ ],
     "requiredActions" : [ ],
-    "realmRoles" : [ "default-roles-myrealm" ],
+    "realmRoles" : [ "general", "developers", "default-roles-myrealm" ],
     "notBefore" : 0,
     "groups" : [ ]
   }, {
@@ -609,6 +730,22 @@
     "fullScopeAllowed" : true,
     "nodeReRegistrationTimeout" : -1,
     "protocolMappers" : [ {
+      "id" : "bbb27101-2ff1-4a35-8e51-6ba27c836082",
+      "name" : "groups",
+      "protocol" : "openid-connect",
+      "protocolMapper" : "oidc-usermodel-realm-role-mapper",
+      "consentRequired" : false,
+      "config" : {
+        "introspection.token.claim" : "true",
+        "multivalued" : "true",
+        "userinfo.token.claim" : "true",
+        "user.attribute" : "foo",
+        "id.token.claim" : "true",
+        "access.token.claim" : "true",
+        "claim.name" : "groups",
+        "jsonType.label" : "String"
+      }
+    }, {
       "id" : "5c895003-c78c-4fba-b7af-5cbbc3fb60d7",
       "name" : "Client ID",
       "protocol" : "openid-connect",
@@ -1152,8 +1289,9 @@
     "description" : "OpenID Connect scope for add user roles to the access token",
     "protocol" : "openid-connect",
     "attributes" : {
-      "include.in.token.scope" : "false",
+      "include.in.token.scope" : "true",
       "display.on.consent.screen" : "true",
+      "gui.order" : "",
       "consent.screen.text" : "${rolesScopeConsentText}"
     },
     "protocolMappers" : [ {
@@ -1225,7 +1363,7 @@
       }
     } ]
   } ],
-  "defaultDefaultClientScopes" : [ "role_list", "profile", "email", "roles", "web-origins", "acr" ],
+  "defaultDefaultClientScopes" : [ "role_list", "profile", "email", "web-origins", "acr", "roles" ],
   "defaultOptionalClientScopes" : [ "offline_access", "address", "phone", "microprofile-jwt" ],
   "browserSecurityHeaders" : {
     "contentSecurityPolicyReportOnly" : "",
@@ -1285,7 +1423,7 @@
       "subType" : "authenticated",
       "subComponents" : { },
       "config" : {
-        "allowed-protocol-mapper-types" : [ "oidc-sha256-pairwise-sub-mapper", "oidc-usermodel-property-mapper", "oidc-address-mapper", "oidc-full-name-mapper", "saml-role-list-mapper", "oidc-usermodel-attribute-mapper", "saml-user-property-mapper", "saml-user-attribute-mapper" ]
+        "allowed-protocol-mapper-types" : [ "saml-role-list-mapper", "oidc-usermodel-attribute-mapper", "oidc-full-name-mapper", "saml-user-attribute-mapper", "oidc-usermodel-property-mapper", "oidc-address-mapper", "saml-user-property-mapper", "oidc-sha256-pairwise-sub-mapper" ]
       }
     }, {
       "id" : "b6acdb57-579e-4176-8da7-d6c89054ea0c",
@@ -1313,7 +1451,7 @@
       "subType" : "anonymous",
       "subComponents" : { },
       "config" : {
-        "allowed-protocol-mapper-types" : [ "oidc-full-name-mapper", "saml-role-list-mapper", "oidc-usermodel-property-mapper", "saml-user-property-mapper", "oidc-usermodel-attribute-mapper", "oidc-sha256-pairwise-sub-mapper", "saml-user-attribute-mapper", "oidc-address-mapper" ]
+        "allowed-protocol-mapper-types" : [ "oidc-usermodel-attribute-mapper", "oidc-sha256-pairwise-sub-mapper", "oidc-usermodel-property-mapper", "saml-role-list-mapper", "oidc-address-mapper", "oidc-full-name-mapper", "saml-user-attribute-mapper", "saml-user-property-mapper" ]
       }
     } ],
     "org.keycloak.keys.KeyProvider" : [ {
