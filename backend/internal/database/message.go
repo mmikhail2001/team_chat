@@ -15,6 +15,8 @@ func (db *Database) CreateMessage(content string, channel_id string, system_mess
 	var channel *Channel
 	var statusCode int
 
+	log.Println("channel_id ====", channel_id)
+
 	if system_message {
 		channel, statusCode = db.GetChannelWithoutUser(channel_id)
 	} else {

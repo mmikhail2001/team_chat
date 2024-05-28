@@ -45,7 +45,7 @@ function Header({ channel, toggleRecipients }: { channel: ChannelOBJ, toggleReci
                 <span className='text-lg'>{ channel.type === 1 ? channel.recipients[0].username : channel.name }</span>
             </div>
             <div className='w-1/2 flex items-center justify-end'>
-            { (channel.type === 2) && <BsPersonPlusFill className='mx-2 cursor-pointer' size={18} onClick={() => popup_ctx.open(<AddUser id={channel.id} />)} /> }
+            { (channel.type === 2) && <BsPersonPlusFill className='mx-2 cursor-pointer' id="add_user_icon" size={18} onClick={() => popup_ctx.open(<AddUser id={channel.id} />)} /> }
             { (channel.type === 2 || channel.type === 4 || channel.type === 5) && <BsPeopleFill className='mx-2 cursor-pointer' size={18} onClick={() => toggleRecipients(p => !p)} /> }
             <BsFillPinFill className='mx-2 cursor-pointer' size={18} onClick={() => setShowPinnedMessage(p => !p)} />
             { (channel.type === 2) && <BsThreeDotsVertical className='mx-2 cursor-pointer' size={18} onClick={() => popup_ctx.open(<EditChannel channel={channel} />)} /> }

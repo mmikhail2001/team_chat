@@ -30,7 +30,27 @@ function Chat() {
 
 	const messageElement = useRef<HTMLDivElement>(null);
 
-	const channel: ChannelOBJ = channel_context.channels.get(channel_id) || {} as ChannelOBJ;
+	// const channel: ChannelOBJ = channel_context.channels.get(channel_id) || {} as ChannelOBJ;
+	const [channel, setChannel] = useState<ChannelOBJ>({} as ChannelOBJ);
+
+	useEffect(() => {
+        const currentChannel = channel_context.channels.get(channel_id) || {} as ChannelOBJ;
+        if (Object.keys(currentChannel).length === 0) {
+            // Если channel пустой, делаем запрос
+            fetch(`/api/channels/${channel_id}`)
+                .then(response => response.json())
+                .then(data => {
+                    setChannel(data);
+                    // Обновите контекст каналов, если это необходимо
+                    // channel_context.setChannels(prev => new Map(prev).set(channel_id, data));
+                })
+                .catch(error => {
+                    console.error('Error fetching channel:', error);
+                });
+        } else {
+            setChannel(currentChannel);
+        }
+    }, [channel_id]);
 
 	// TODO: по веб-сокету придет обновление о новых сообщениях, тогда перерендерим MessageElement
 	const MessageElement = useMemo(() => {

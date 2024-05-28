@@ -187,6 +187,8 @@ func (h *Handler) HandleLogin(w http.ResponseWriter, r *http.Request) {
 // фронт не наш тянет эту ручку? значит, http.Redirect ???
 func (h *Handler) HandleLoginCallback(w http.ResponseWriter, r *http.Request) {
 	log.Println("HandleLoginCallback\n\n")
+	log.Println(r.URL)
+
 	state := r.FormValue("state")
 	if _, ok := h.oauthStates[state]; !ok {
 		fmt.Printf("invalid oauth state, expected '%s'\n", state)

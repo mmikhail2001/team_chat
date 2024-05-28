@@ -1,0 +1,168 @@
+IT
+CI/CD
+GitLab
+API
+SIEM
+DLP
+SSO
+Active Directory/LDAP
+HTTP
+Webhook
+Фронтенд
+Бекенд
+UI/UX
+DDoS
+Push-уведомления
+СУБД
+ФСТЭК
+ФСБ
+SLA
+2FA
+SaaS
+Figma
+SPA
+MPA
+CSR
+SSR
+HTML
+CSS 
+DOM 
+CRUD
+Docker
+Keycloak
+тред 
+NoSQL 
+JSON
+base64 
+URL
+ООП
+TCP
+React
+MongoDB
+OpenID Connect
+OAuth2
+cookie
+YAML
+Nginx
+epoll
+Vite
+bridge-интерфейс
+MAC
+iptables
+Postman
+Chai
+Selenium WebDriver
+VU (виртуальные пользователи)
+LIR
+PI-адреса
+NAT
+BGP
+DMZ 
+WAF
+IPSec
+VPN
+VLAN
+Wi-Fi
+AP
+AC 
+Proxmox VE
+DNS
+DHCP
+IRP-система
+ИБ
+IDEF0
+
+
+2FA (Two-Factor Authentication) - Двухфакторная аутентификация.
+AC (Access Point Controller) - Контроллер точек доступа.
+Active Directory/LDAP (Lightweight Directory Access Protocol) - Служба каталогов для управления пользователями и устройствами в сети.
+API (Application Programming Interface) - Интерфейс для взаимодействия различных приложений.
+AP (Access Point) - Точка доступа в сети Wi-Fi.
+base64 - Схема кодирования двоичных данных в текстовый формат.
+BGP (Border Gateway Protocol) - Протокол динамической маршрутизации между автономными системами.
+Бекенд - Серверная часть веб-приложения, отвечающая за обработку данных.
+bridge-интерфейс - Сетевой интерфейс, соединяющий два сетевых сегмента.
+Chai - Библиотека для тестирования в JavaScript.
+CI/CD (Continuous Integration/Continuous Deployment) - Непрерывная интеграция и развертывание программного обеспечения.
+cookie - Небольшой фрагмент данных, сохраняемый браузером.
+CRUD (Create, Read, Update, Delete) - Базовые операции для работы с данными.
+CSS (Cascading Style Sheets) - Каскадные таблицы стилей для оформления веб-страниц.
+CSR (Client-Side Rendering) - Рендеринг веб-страниц на стороне клиента.
+DDoS (Distributed Denial of Service) - Распределенная атака, направленная на отказ в обслуживании.
+DHCP (Dynamic Host Configuration Protocol) - Протокол динамической конфигурации узлов сети.
+DLP (Data Loss Prevention) - Система предотвращения утечек данных.
+DNS (Domain Name System) - Система доменных имен.
+Docker - Платформа для контейнеризации приложений.
+DOM (Document Object Model) - Объектная модель документа.
+epoll - Механизм для мониторинга событий файловых дескрипторов в Linux.
+Figma - Инструмент для дизайна и прототипирования.
+Фронтенд - Клиентская часть веб-приложения, отображаемая в браузере.
+ФСБ (Федеральная служба безопасности) - Орган государственной безопасности России.
+ФСТЭК (Федеральная служба по техническому и экспортному контролю) - Федеральная служба по техническому и экспортному контролю России.
+GitLab - Платформа для DevOps, обеспечивающая CI/CD и репозиторий кода.
+HTML (HyperText Markup Language) - Язык разметки гипертекста.
+HTTP (Hypertext Transfer Protocol) - Протокол передачи гипертекста.
+IB (Information Security) - Информационная безопасность.
+IDEF0 - Метод моделирования бизнес-процессов.
+iptables - Утилита для настройки правил фильтрации пакетов в Linux.
+IRP-система (Incident Response Platform) - Платформа для управления инцидентами.
+JSON (JavaScript Object Notation) - Текстовый формат обмена данными.
+Keycloak - Решение для управления аутентификацией и авторизацией.
+LIR (Local Internet Registry) - Локальный интернет-регистратор.
+MAC (Media Access Control) - Уникальный адрес сетевого интерфейса.
+MongoDB - Документо-ориентированная NoSQL база данных.
+MPA (Multi-Page Application) - Многостраничное приложение.
+NAT (Network Address Translation) - Трансляция сетевых адресов.
+Nginx - Веб-сервер и обратный прокси-сервер.
+NoSQL - Нереляционные базы данных.
+OAuth2 - Протокол авторизации.
+ООП (Объектно-ориентированное программирование) - Парадигма программирования.
+OpenID Connect - Протокол аутентификации.
+PI-адреса (Provider Independent addresses) - Провайдер-независимые IP-адреса.
+Postman - Инструмент для тестирования API.
+Proxmox VE - Платформа виртуализации на основе Debian.
+Push-уведомления - Уведомления, отправляемые на устройство пользователя.
+React - JavaScript-библиотека для создания пользовательских интерфейсов.
+SaaS (Software as a Service) - Программное обеспечение как услуга.
+Selenium WebDriver - Инструмент для автоматизированного тестирования веб-приложений.
+SIEM (Security Information and Event Management) - Система управления информацией и событиями безопасности.
+SLA (Service Level Agreement) - Соглашение об уровне обслуживания.
+SPA (Single Page Application) - Одностраничное приложение.
+SRA (Stateful Reassembly) - Восстановление состояния сеансов связи.
+SSO (Single Sign-On) - Единая точка входа.
+SSR (Server-Side Rendering) - Рендеринг на стороне сервера.
+СУБД (Система управления базами данных) - Программное обеспечение для управления базами данных.
+TCP (Transmission Control Protocol) - Протокол управления передачей.
+тред - Поток выполнения в многозадачных системах.
+URL (Uniform Resource Locator) - Унифицированный указатель ресурса.
+VLAN (Virtual Local Area Network) - Виртуальная локальная сеть.
+Vite - Быстрый инструмент для сборки и разработки веб-приложений.
+VPN (Virtual Private Network) - Виртуальная частная сеть.
+VU (виртуальные пользователи) - Виртуальные пользователи, имитирующие поведение реальных пользователей.
+WAF (Web Application Firewall) - Межсетевой экран для веб-приложений.
+Webhook - Метод передачи данных через HTTP по событию.
+Wi-Fi - Технология беспроводной локальной сети.
+YAML (YAML Ain't Markup Language) - Формат сериализации данных.
+
+
+8. Технология программирования Иванова Г.С.
+9. Современные стандарты идентификации: OAuth 2.0, OpenID Connect, WebAuthn
+https://habr.com/ru/articles/491116/
+10. Application of Epoll in Golang
+https://www.mo4tech.com/application-of-epoll-in-golang.html
+11. Сети Docker изнутри: как Docker использует iptables и интерфейсы Linux
+https://habr.com/ru/articles/333874/
+12. Нагрузочное тестирование как CI-сервис для разработчиков
+https://prohoster.info/blog/administrirovanie/nagruzochnoe-testirovanie-kak-ci-servis-dlya-razrabotchikov
+13. Postman. Simulate user traffic to test your API performance
+https://learning.postman.com/docs/collections/performance-testing/testing-api-performance/#view-real-time-performance-metrics
+14. Выпуск СДСМ "BGP и IP SLA"
+https://linkmeup.gitbook.io/sdsm/8.-bgp-i-ip-sla
+15. Википедия. DMZ
+https://ru.wikipedia.org/wiki/DMZ_(компьютерные_сети)
+16. Выпуск СДСМ "VPN"
+https://linkmeup.ru/blog/1197/
+17. Кластеризация в Proxmox VE
+https://habr.com/ru/companies/selectel/articles/489914/
+18. Positive Technologies. MaxPatrol SIEM
+https://www.ptsecurity.com/ww-en/products/mpsiem/

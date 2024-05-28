@@ -167,7 +167,7 @@ export default function MessageContextMenu(props: propsMsgCtxProps) {
     return (
         <div className='ContextMenu' style={style}>
             <div className="flex gap-2 justify-center">
-                <FaHeart className='reaction-icon text-2xl text-red-500 cursor-pointer hover:text-red-600' onClick={() => sendReaction('love')} />
+                <FaHeart id="heart_reaction" className='reaction-icon text-2xl text-red-500 cursor-pointer hover:text-red-600' onClick={() => sendReaction('love')} />
                 <FaSmile className='reaction-icon text-2xl text-yellow-500 cursor-pointer hover:text-yellow-600' onClick={() => sendReaction('smile')} />
                 <BiSolidLike className='reaction-icon text-2xl text-green-600 cursor-pointer hover:text-green-700' onClick={() => sendReaction('like')} />
                 <BiSolidDislike className='reaction-icon text-2xl text-blue-500 cursor-pointer hover:text-blue-600' onClick={() => sendReaction('dislike')} />
