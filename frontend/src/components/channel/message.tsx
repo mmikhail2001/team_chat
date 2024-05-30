@@ -191,7 +191,7 @@ function Message({ message, short }: { message: MessageOBJ, short: boolean }) {
                     console.log("user_ctx.reactions ===", user_ctx.reactions)
                     const reactionIcon = reactionsMap[reactionType];
                     const element = (
-                        <div key={reactionType} className={`flex gap-2 ${isUserReaction ? 'bg-sky-600 p-1 rounded-lg px-2' : ''}`} onClick={() => handleReactionClick(reactionType)}>
+                        <div key={reactionType} className={`flex gap-2 ${isUserReaction ? 'bg-sky-400 p-1 rounded-lg px-2' : ''}`} onClick={() => handleReactionClick(reactionType)}>
                             <div className="flex items-center">
                                 {reactionIcon}
                                 {isUserReaction ? <span className="font-bold ml-1">{count}</span> : <span className="ml-1">{count}</span>}
@@ -208,31 +208,30 @@ function Message({ message, short }: { message: MessageOBJ, short: boolean }) {
 
 
     return (
-        <div className="relative w-full flex my-1 hover:bg-zinc-900" onContextMenu={(event) => {
+        <div className="relative w-full flex my-1 hover:bg-gray-50" onContextMenu={(event) => {
             event.preventDefault();
             ctx_menu.open(<MessageContextMenu x={event.clientX} y={event.clientY} message={message} />)
         }
         }>
             <div className="absolute left-0 w-24 flex items-center justify-center">
-                {(!message.system_message && !short && ShowMsg) && <img className="h-12 w-12 rounded-xl bg-zinc-800" src={message.author.avatar} alt="Avatar" onError={setDefaultAvatar} />}
+                {(!message.system_message && !short && ShowMsg) && <img className="h-12 w-12 rounded-xl bg-zinc-50" src={message.author.avatar} alt="Avatar" onError={setDefaultAvatar} />}
                 {message.system_message && <FaServer size={24} />}
             </div>
             <div className="w-full ml-24 mr-32 flex flex-col">
                 {ShowMsg && <>
                     {(!message.system_message && !short) && <span className="text-xl">{message.author.username}</span>}
                     {!edit && 
-                        <div className="text-neutral-400">
+                        <div className="text-neutral-900">
                         { message.content != "" &&
-                            <div className={user_ctx.id === message.author.id ? "bg-gray-800 mb-3 p-2 rounded-lg inline-block" : "bg-gray-700 mb-3 bg-opacity-50 p-2 rounded-lg inline-block"}>
+                            <div className={user_ctx.id === message.author.id ? "bg-gray-200 mb-3 p-2 rounded-lg inline-block" : "bg-gray-200 mb-3 bg-opacity-50 p-2 rounded-lg inline-block"}>
                                 {message.content}
                             </div>
                         }       
                       </div>
-                        // <span className="text-neutral-400 rounded-lg bg-gray-800 bg-opacity-50 p-2 inline-block">{message.content}</span>
                     }
                     {edit &&
                         <div>
-                            <input className="bg-zinc-800 w-11/12 outline-none px-2 rounded" type="text" value={msg} onKeyDown={handleKey} onChange={onInputChange} />
+                            <input className="bg-slate-400 w-11/12 outline-none px-2 rounded" type="text" value={msg} onKeyDown={handleKey} onChange={onInputChange} />
                             <p className="text-xm">Escape to <button className="text-cyan-400 text-sm hover:underline" onClick={cancelEdit}>Cancel</button> • Enter to <button className="text-cyan-400 text-sm hover:underline" onClick={handleEdit}>Save</button></p>
                         </div>
                     }

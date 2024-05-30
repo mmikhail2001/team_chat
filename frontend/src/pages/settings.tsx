@@ -126,7 +126,7 @@ function Settings() {
 
     return (
         <div className='h-full w-full overflow-hidden flex flex-col'>
-            <div className='h-16 flex items-center justify-around bg-zinc-900'>
+            <div className='h-16 flex items-center justify-around bg-zinc-300'>
                 <h2>Settings</h2>
                 <button onClick={() => naviagte(-1)}><HiXCircle className='hover:text-gray-600' size={42} /></button>
             </div>
@@ -137,17 +137,17 @@ function Settings() {
                     <HiCamera size={64} onClick={() => avatar_input.current.click()} className="absolute self-center justify-self-center text-white opacity-70 cursor-pointer" />
                     <input type="file" ref={avatar_input} name="filename" hidden onChange={onIconChange} accept="image/*"></input>
                 </div>
-                    <input className="h-8 w-4/5 cursor-not-allowed rounded my-1 px-2 bg-zinc-700 text-gray-400" type="text" disabled value={user_ctx.username} onClick={() => alert("Username changing is not supported!")} />
-                    <button className='w-24 h-10 bg-green-700 rounded hover:bg-green-800' onClick={avatar}>Save</button>
+                    <input className="h-8 w-4/5 cursor-not-allowed rounded my-1 px-2 bg-zinc-300 text-gray-400" type="text" disabled value={user_ctx.username} onClick={() => alert("Username changing is not supported!")} />
+                    <button className='w-24 h-10 bg-green-300 rounded hover:bg-green-400' onClick={avatar}>Save</button>
                     <div className="flex items-center space-x-2">
                         <input 
-                            className="h-8 w-4/5 rounded my-1 px-2 bg-zinc-700 text-gray-400 cursor-not-allowed" 
+                            className="h-8 w-4/5 rounded my-1 px-2 bg-zinc-300 text-gray-800 cursor-not-allowed" 
                             type="text" 
                             disabled 
                             value={user_ctx.id} 
                         />
                         <button 
-                            className='w-24 h-8 bg-yellow-700 rounded hover:bg-yellow-900' 
+                            className='w-24 h-8 bg-yellow-300 rounded hover:bg-yellow-400' 
                             onClick={() => { navigator.clipboard.writeText(user_ctx.id) }}
                         >
                             Copy
@@ -155,10 +155,10 @@ function Settings() {
                     </div>
                 </SettingsItem>
                 <SettingsItem title='Chanage Password'>
-                    <input className="h-8 w-4/5 rounded my-1 px-2 bg-zinc-800" type="password" placeholder='Current Password' ref={password_ref} />
-                    <input className="h-8 w-4/5 rounded my-1 px-2 bg-zinc-800" type="password" placeholder='New Password' ref={new_password_ref} />
-                    <input className="h-8 w-4/5 rounded my-1 px-2 bg-zinc-800" type="password" placeholder='Retype New Password' ref={confirm_password_ref} />
-                    <button className='w-24 h-10 bg-green-700 rounded hover:bg-green-800 my-1' onClick={changePassword}>Save</button>
+                    <input className="h-8 w-4/5 rounded my-1 px-2 bg-zinc-400" type="password" placeholder='Current Password' ref={password_ref} />
+                    <input className="h-8 w-4/5 rounded my-1 px-2 bg-zinc-400" type="password" placeholder='New Password' ref={new_password_ref} />
+                    <input className="h-8 w-4/5 rounded my-1 px-2 bg-zinc-400" type="password" placeholder='Retype New Password' ref={confirm_password_ref} />
+                    <button className='w-24 h-10 bg-green-300 rounded hover:bg-green-400 my-1' onClick={changePassword}>Save</button>
                 </SettingsItem>
                     {/* "Only Friends Can Dm" внутри ToggleBtn попадет через children */}
                     {/* аналог Outlet, только Outlet работает с роутерами */}

@@ -30,7 +30,7 @@ def auth(chrome_driver, main_page):
     password_input.send_keys("roma")
     login_button.click()
 
-def test_search_employees_and_send_direct_message(main_page, auth):
+def test_search_employees_and_send_direct_message(chrome_driver,main_page, auth):
     # Находим элемент поиска и вводим текст "misha"
     search_input = chrome_driver.find_element(By.XPATH, "//input[@placeholder='Search']")
     search_input.send_keys("misha")

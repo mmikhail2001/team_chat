@@ -44,8 +44,8 @@ function Thread() {
 			if (preDate !== date) {
 				messagesList.push(
 					<div key={date} className="relative flex items-center justify-center h-8">
-						<span className='absolute w-full border-t-2 border-zinc-800'></span>
-						<span className='absolute bg-black px-4'>{date}</span>
+						<span className='absolute w-full border-t-2 bg-zinc-300'></span>
+						<span className='absolute rounded-md bg-zinc-300 px-4'>{date}</span>
 					</div>
 				);
 				preDate = date;
@@ -109,11 +109,11 @@ function Thread() {
 	}
 
 	return (
-		<div className="relative h-full w-1/2 flex-col flex">
-			<div className='absolute w-full h-16 flex items-center px-6 bg-slate-800'>
+		<div className="relative h-full w-3/4 flex-col flex border bg-zinc-100">
+			<div className='absolute w-full h-16 flex items-center px-6 bg-slate-300'>
 				<div className='w-full flex items-center justify-between'>
 				<span className='text-lg p-2'>
-					Thread by message: <span className='text-lg p-2 rounded-md bg-slate-900'>{truncateString(thread_context.message.content, 3)}</span>
+					Thread by message: <span className='text-lg p-2 rounded-md bg-slate-400'>{truncateString(thread_context.message.content, 4)}</span>
 				</span>
 					<div className="flex items-center">
 						<IoClose
@@ -132,7 +132,7 @@ function Thread() {
 						{MessageElement}
 					</div>
 					<div className="h-16 absolute bottom-0 w-full flex items-center justify-evenly border-t border-zinc-800">
-						<input className='w-[85%] h-8 rounded-md bg-zinc-800 px-4' type="text" placeholder="Type a message..." onKeyPress={updateChat} value={Input_message} onChange={onInputChange} />
+						<input className='w-[85%] h-8 rounded-md bg-zinc-300 px-4' type="text" placeholder="Type a message..." onKeyPress={updateChat} value={Input_message} onChange={onInputChange} />
 					</div>
 				</div>
 			</div>

@@ -79,8 +79,8 @@ function Chat() {
 			if (preDate !== date) {
 				messagesList.push(
 					<div key={date} className="relative flex items-center justify-center h-8">
-						<span className='absolute w-full border-t-2 border-zinc-800'></span>
-						<span className='absolute bg-black px-4'>{date}</span>
+						<span className='absolute w-full border-t-2 border-zinc-300'></span>
+						<span className='absolute bg-zinc-300 rounded-md px-4'>{date}</span>
 					</div>
 				);
 				preDate = date;
@@ -182,7 +182,7 @@ function Chat() {
 			setHasFile(true);
 			
 			setFileJSX(
-				<div className='relative h-32 w-32 mx-4 bg-zinc-900 rounded flex items-center justify-center' key={file.name}>
+				<div className='relative h-32 w-32 mx-4 bg-zinc-300 rounded flex items-center justify-center' key={file.name}>
 					<FaFile size={48} />
 					<button className='absolute top-1 right-1 bg-none border-none text-red-600' onClick={() => { file_input.current.value = ''; onFileChange(); }}>
 						<HiXMark size={20} />
@@ -205,11 +205,11 @@ function Chat() {
 					</div>
 					{
 						(channel.type == 1 || channel.type == 2 || (channel.type == 5 && channel.owner_id == user_ctx.id )) && 
-						<div className="h-16 absolute bottom-0 w-full flex items-center justify-evenly border-t border-zinc-800">
-							{ hasFile && <div className='absolute bottom-16 right-0 h-40 w-full flex items-center rounded-t-xl bg-black border-t border-r border-l border-zinc-800'>{fileJSX}</div> } 
+						<div className="h-16 absolute bottom-0 w-full flex items-center justify-evenly border-t border-zinc-300">
+							{ hasFile && <div className='absolute bottom-16 right-0 h-40 w-full flex items-center rounded-t-xl border-t border-r border-l border-zinc-300'>{fileJSX}</div> } 
 							<input type="file" ref={file_input} name="filename" hidden onChange={onFileChange} />
-							<BsPlusCircleFill size={26} onClick={() => file_input.current.click()} />
-							<input className='w-[85%] h-8 rounded-md bg-zinc-800 px-4' type="text" placeholder="Type a message..." onKeyPress={updateChat} value={Input_message} onChange={onInputChange} />
+							<BsPlusCircleFill color="gray" size={26} onClick={() => file_input.current.click()} />
+							<input className='w-[85%] h-8 rounded-md bg-zinc-300 px-4' type="text" placeholder="Type a message..." onKeyPress={updateChat} value={Input_message} onChange={onInputChange} />
 						</div>
 					}
 

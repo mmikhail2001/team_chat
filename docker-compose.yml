@@ -17,6 +17,7 @@ services:
   keycloak:
     image: keycloak/keycloak:23.0
     command: -v start-dev --import-realm
+    restart: always
     ports:
       - 8090:8080
     environment:

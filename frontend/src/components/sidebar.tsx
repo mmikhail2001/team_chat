@@ -126,21 +126,21 @@ function SideBar() {
 			<SideBarHeader />
 			<div className="flex items-center">
 				{!user_ctx.is_guest && 
-					<input className='h-6 w-44 my-3 mx-5 px-2 border-none rounded bg-zinc-800 focus:outline-none' 
+					<input className='h-6 w-57 my-3 mx-5 px-2 border-none rounded bg-zinc-300 focus:outline-none' 
 					type="text" placeholder="Search" ref={searchChats} onChange={handleSearchChange} value={searchValue} />
 				}
 				{searchValue && <IoClose
 					className="text-white cursor-pointer"
 					onClick={cancelSearch}
 					size="20"
-					style={{ marginLeft: '-7px', marginTop: '2px' }}
+					style={{ marginLeft: '-7px', marginTop: '2px', color: 'black' }}
 					/>}
 			</div>
 			
 			{!isSearchActive ? (
-				<div className="px-5 py-3 my-4 bg-gray-900 text-gray-500">My Chats</div>
+				<div className="px-5 py-3 my-4 bg-slate-300 text-gray-800">My Chats</div>
 			) : (
-				<div className="px-5 py-3 my-4 bg-gray-900 text-gray-500">Search Results</div>
+				<div className="px-5 py-3 my-4 bg-slate-300 text-gray-800">Search Results</div>
 			)}
 			{isSearchActive ? searchResults : channels_element}
 		</div>

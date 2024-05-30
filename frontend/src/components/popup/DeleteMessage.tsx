@@ -15,7 +15,7 @@ export default function DeleteMessage({ message }:{ message: MessageOBJ }) {
     }
 
     return (
-        <div className='relative rounded-2xl p-8 text-white bg-zinc-900 min-h-fit w-80 flex flex-col items-center' onClick={(e) => e.stopPropagation()}>
+        <div className='relative rounded-2xl p-8 text-black bg-zinc-300 min-h-fit w-80 flex flex-col items-center' onClick={(e) => e.stopPropagation()}>
             <h3>Delete Message</h3>
             <p>Are you sure you want to delete?</p>
             <div className='p-4'>

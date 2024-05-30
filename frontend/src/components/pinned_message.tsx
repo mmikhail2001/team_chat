@@ -23,10 +23,10 @@ export default function PinnedMessage({ message }: {message: MessageOBJ}) {
     }
 
     return (
-        <div className='w-11/12 bg-zinc-800 mb-4 rounded p-2'>
+        <div className='w-11/12 bg-slate-200 mb-4 rounded p-2'>
             <div className='flex items-center justify-between'>
-                <div className='flex items-center'><h4>{message.author.username}</h4> <p className='text-xs mx-4 text-zinc-500'>{time} - {date}</p></div>
-                <button className='bg-neutral-500 rounded-full' onClick={UnpinMsg}>
+                <div className='flex items-center rounded-md p-2 bg-slate-300'><h4>{message.author.username}</h4> <p className='text-xs mx-4 text-zinc-800'>{time} - {date}</p></div>
+                <button className='bg-neutral-200 rounded-full' onClick={UnpinMsg}>
                     <HiXMark />
                 </button>
             </div>

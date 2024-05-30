@@ -15,7 +15,7 @@ import { HiCamera } from "react-icons/hi";
 
 function Invite({ invite, onDelete }: { invite: InviteOBJ, onDelete: (invite_code: string) => void }) {
     return (
-        <div className="m-4 h-14 flex bg-zinc-900 rounded items-center w-11/12">
+        <div className="m-4 h-14 flex bg-zinc-300 rounded items-center w-11/12">
             <p className="w-1/2 text-lg ml-4">{invite.invite_code}</p>
             <div className="w-1/2 flex items-center justify-end">
                 <p>{invite.created_at}</p>
@@ -39,7 +39,7 @@ function Ban({ ban, channel_id, setBanReload }: { ban: BanOBJ, channel_id: strin
     }
 
     return (
-        <div className="m-4 p-2 flex flex-col bg-zinc-900 rounded w-11/12">
+        <div className="m-4 p-2 flex flex-col bg-zinc-300 rounded w-11/12">
             <div className="flex items-center">
                 <div className="w-1/2 flex items-center">
                     <img className="h-10 w-10 rounded mr-2" src={ban.banned_user.avatar} alt="BannedUserAvatar" onError={setDefaultAvatar} />
@@ -171,20 +171,20 @@ export default function EditChannel({ channel }: { channel: ChannelOBJ }) {
     }
 
     return (
-        <div className="h-full w-full flex bg-black overflow-hidden" onClick={e => e.stopPropagation()}>
+        <div className="h-full w-full flex bg-white overflow-hidden" onClick={e => e.stopPropagation()}>
             <div className="h-full w-64 flex flex-col border-r border-r-neutral-700">
-                <button className="m-2 h-8 rounded border-none bg-neutral-700 hover:cursor-pointer hover:bg-neutral-800" onClick={() => { setChannelEditSection(0) }}>Overview</button>
-                <button className="m-2 h-8 rounded border-none bg-neutral-700 hover:cursor-pointer hover:bg-neutral-800" onClick={() => { setChannelEditSection(1) }}>Invites</button>
-                <button className="m-2 h-8 rounded border-none bg-neutral-700 hover:cursor-pointer hover:bg-neutral-800" onClick={() => { setChannelEditSection(2) }}>Recipients</button>
-                <button className="m-2 h-8 rounded border-none bg-neutral-700 hover:cursor-pointer hover:bg-neutral-800" onClick={() => { setChannelEditSection(3) }}>Bans</button>
-                <button className="m-2 h-8 rounded border-none bg-neutral-700 hover:cursor-pointer hover:bg-neutral-800" onClick={() => { popup_ctx.close() }}>Close</button>
+                <button className="m-2 h-8 rounded border-none bg-neutral-300 hover:cursor-pointer hover:bg-neutral-400" onClick={() => { setChannelEditSection(0) }}>Overview</button>
+                <button className="m-2 h-8 rounded border-none bg-neutral-300 hover:cursor-pointer hover:bg-neutral-400" onClick={() => { setChannelEditSection(1) }}>Invites</button>
+                <button className="m-2 h-8 rounded border-none bg-neutral-300 hover:cursor-pointer hover:bg-neutral-400" onClick={() => { setChannelEditSection(2) }}>Recipients</button>
+                <button className="m-2 h-8 rounded border-none bg-neutral-300 hover:cursor-pointer hover:bg-neutral-400" onClick={() => { setChannelEditSection(3) }}>Bans</button>
+                <button className="m-2 h-8 rounded border-none bg-neutral-300 hover:cursor-pointer hover:bg-neutral-400" onClick={() => { popup_ctx.close() }}>Close</button>
             </div>
             <div className="h-full w-full flex flex-col items-center md:items-start">
                 {/* TODO: не лучше ли разбить на 4 компонента? */}
                 {channelEditSection === 0 &&
                     <>
                     {/* копипаст работы с аватарками */}
-                        <input className="bg-zinc-800 h-8 w-11/12 md:w-48" ref={channel_name} type="text" placeholder="Channel Name" defaultValue={channel.name} />
+                        <input className="bg-zinc-300 h-8 w-11/12 md:w-48" ref={channel_name} type="text" placeholder="Channel Name" defaultValue={channel.name} />
                         <div className="relative flex items-center justify-center h-32 w-32">
                             <img src={channel.icon} onClick={() => icon_input.current.click()} onError={setDefaultIcon} className="h-24 w-24 rounded-xl cursor-pointer p-0 m-2 border-slate-300 border-2 border-dashed" ref={icon_image} alt="icon" />
                             <HiCamera size={64} onClick={() => icon_input.current.click()} className="absolute self-center justify-self-center text-white opacity-75 cursor-pointer" />

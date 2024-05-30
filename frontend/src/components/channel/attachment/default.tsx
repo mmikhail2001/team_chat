@@ -21,10 +21,10 @@ export default function AttachmentDefault({ message }: { message: MessageOBJ }) 
     };
 
     return (
-        <div className="relative h-16 flex bg-zinc-900 rounded-lg items-center mb-4 p-4">
+        <div className="relative h-16 flex bg-zinc-200 rounded-lg items-center mb-4 p-4">
             <FaFile size={32} />
             <div className="flex flex-col px-4">
-                <p className="m-0 text-cyan-400 hover:underline">
+                <p className="m-0 text-black hover:underline">
                     <a href={message.attachments[0].url} rel="noreferrer" target="_blank">
                         {message.attachments[0].filename}
                     </a>

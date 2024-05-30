@@ -14,11 +14,11 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #292c2f;
+  background: #b8b8b8;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #202020;
+  background: #b8b8b8;
 }
 
 .toggle {
@@ -87,10 +87,10 @@ body {
   position: absolute;
   display: flex;
   flex-direction: column;
-  background-color: #202020;
+  background-color: #e4e4e4;
   padding: 0.3rem;
   border-radius: 10px;
-  box-shadow: 0 0 2px 2px #181818;
+  box-shadow: 0 0 2px 2px #9c9c9c;
 }
 
 .ContextMenu button {
@@ -102,7 +102,7 @@ body {
 }
 
 .CtxBtn {
-  color: beige;
+  color: rgba(16, 16, 16, 0.76);
 }
 
 .CtxBtn:hover {

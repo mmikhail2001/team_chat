@@ -22,7 +22,7 @@ export default function DeleteChannel({ channel }: { channel: ChannelOBJ }) {
     return (
         // e.stopPropagation() - чтобы по клику на модальное окно событие не распространялось дальше по дереву
         // а дальше по дереву есть обработчик клика на window, который закрывает popup
-        <div onClick={(e) => e.stopPropagation()} className='relative rounded-2xl p-8 text-white bg-zinc-900 min-h-fit w-80 flex flex-col items-center'>
+        <div onClick={(e) => e.stopPropagation()} className='relative rounded-2xl p-8 text-black bg-zinc-300 min-h-fit w-80 flex flex-col items-center'>
             <h3>Leave '{channel.name}'?</h3>
             <p>Are you sure you want to leave? You won't be able to re-join unless you are re-invited</p>
             <div className='p-4'>

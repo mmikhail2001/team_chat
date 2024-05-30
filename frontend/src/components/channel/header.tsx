@@ -51,7 +51,7 @@ function Header({ channel, toggleRecipients }: { channel: ChannelOBJ, toggleReci
             { (channel.type === 2) && <BsThreeDotsVertical className='mx-2 cursor-pointer' size={18} onClick={() => popup_ctx.open(<EditChannel channel={channel} />)} /> }
             </div>
             { showPinnedMessage && 
-                <div className='absolute top-16 right-16 z-10 w-80 h-96 bg-zinc-900 rounded overflow-y-scroll flex flex-col items-center pt-4'>
+                <div className='absolute top-16 right-16 z-10 w-80 h-96 bg-zinc-300 rounded overflow-y-scroll flex flex-col items-center pt-4'>
                     {pinnedMessage}
                 </div>
             }

@@ -20,9 +20,9 @@ export default function Recipient({ user, channel }: {user: UserOBJ, channel: Ch
             }
         }>
         <div className='relative h-10 w-10 mx-4'>
-        <img className='rounded-xl bg-zinc-900' src={user.avatar} onError={setDefaultAvatar} alt={"Icon"} />
-        <div className='absolute right-0 bg-black rounded-full bottom-0'>
-            { user.status === 1 ? <RxDotFilled size={20} className="text-green-600" /> : <RxDot size={20} className="text-gray-400" /> }
+        <img className='rounded-xl bg-zinc-300' src={user.avatar} onError={setDefaultAvatar} alt={"Icon"} />
+        <div className='absolute right-0 bg-zinc-500 rounded-full bottom-0'>
+            { user.status === 1 ? <RxDotFilled size={17} className="text-green-600" /> : <RxDot size={20} className="text-gray-400" /> }
         </div>
         </div>
         <p>{user.username}</p>

@@ -3,6 +3,7 @@ package restapi
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -53,6 +54,7 @@ func GetMessages(ctx *Context) {
 
 		user, statusCode := ctx.Db.GetUser(message.AccountID)
 		if statusCode != http.StatusOK {
+			fmt.Println("err: get user === ", message.AccountID)
 			continue
 		}
 		messages_res = append(messages_res, response.NewMessage(&message, response.NewUser(user, 0)))

@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -167,6 +168,9 @@ func (db *Database) GetMessages(channel_id string, limit int64, offset int64, us
 		log.Println("GetMessages: All: err: ", err)
 		return nil, http.StatusInternalServerError
 	}
+
+	fmt.Println("channel_id ===", channel_id)
+	fmt.Println("messages_list ===", messages_list)
 
 	return messages_list, http.StatusOK
 }

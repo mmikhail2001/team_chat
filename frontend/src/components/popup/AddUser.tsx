@@ -34,10 +34,10 @@ export default function AddUser({ id }: { id: string }) {
                         const isRecipientExist = channelRecipients ? channelRecipients.some(recipient => recipient.id === user.recipients[0].id) : false;
                         if (!isRecipientExist) {
                             acc.push(
-                                <div className='flex w-full mb-2 items-center relative m-1 bg-gray-800 rounded p-2' key={user.recipients[0].id}>
+                                <div className='flex w-full mb-2 items-center relative m-1 bg-gray-300 rounded p-2' key={user.recipients[0].id}>
                                     <img src={user.recipients[0].avatar} className="h-8 w-8 rounded" alt="avatar" onError={setDefaultAvatar} />
                                     <p className='mx-4 text-xl'>{user.recipients[0].username}</p>
-                                    <button className='absolute m-2 right-0 h-8 rounded hover:bg-green-600 px-2 border-green-600 border-2' onClick={() => AddRecipient(id, user.recipients[0].id).then(popup_ctx.close)}>Add</button>
+                                    <button className='absolute m-2 right-0 h-8 rounded hover:bg-green-400 px-2 border-green-600 border-2' onClick={() => AddRecipient(id, user.recipients[0].id).then(popup_ctx.close)}>Add</button>
                                 </div>
                             );
                         }
@@ -48,13 +48,13 @@ export default function AddUser({ id }: { id: string }) {
                 if (roles && roles.length !== 0) {
                     roles.forEach(role => {
                         userElements.push(
-                            <div className='flex w-full mb-2 items-center relative m-1 bg-gray-800 rounded p-2' key={role}>
+                            <div className='flex w-full mb-3 items-center relative m-1 bg-gray-300 rounded-xl p-2' key={role}>
                                 <FaPeopleGroup className="h-8 w-8 rounded" />
                                 <div className="flex flex-col mx-4">
                                     <p className='text-xl'>{role}</p>
                                     <p className='text-sm text-gray-500'>Role</p>
                                 </div>
-                                <button className='absolute m-2 right-0 h-8 rounded hover:bg-green-600 px-2 border-green-600 border-2' onClick={() => AddRoleToChannel(id, role).then(popup_ctx.close)}>Add</button>
+                                <button className='absolute m-2 right-0 h-8 rounded hover:bg-green-400 px-2 border-green-600 border-2' onClick={() => AddRoleToChannel(id, role).then(popup_ctx.close)}>Add</button>
                             </div>
                         );
                     });
@@ -75,9 +75,9 @@ export default function AddUser({ id }: { id: string }) {
         //     </div>
         // </div>
 
-        <div className='relative rounded-2xl text-white bg-zinc-900 h-1/2 w-1/4 flex flex-col items-center p-6' onClick={e => e.stopPropagation()} defaultValue={username}>
-            <input type="text" className='w-full bg-zinc-800 p-2 rounded-md' placeholder='username or role' onChange={e => setUsername(e.currentTarget.value)} />
-            <div className='bg-zinc-800 w-full flex flex-col p-4 h-full rounded-md mt-6 overflow-y-scroll'>
+        <div className='relative rounded-2xl text-black bg-zinc-300 h-3/4 w-1/3 flex flex-col items-center p-6' onClick={e => e.stopPropagation()} defaultValue={username}>
+            <input type="text" className='w-full bg-zinc-100 p-2 rounded-md' placeholder='username or role' onChange={e => setUsername(e.currentTarget.value)} />
+            <div className='bg-zinc-400 w-full flex flex-col p-4 h-full rounded-md mt-6 overflow-y-scroll'>
                 {elements}
             </div>
         </div>
