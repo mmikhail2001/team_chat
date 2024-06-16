@@ -1,0 +1,102 @@
+{
+    "users": [
+        {
+            "anchor": "admin",
+            "email": "administrator@mail.ru",
+            "username": "artur petrov",
+            "roles": [
+                "generalRole",
+                "managersRole",
+                "developersRole"
+            ]
+        },
+        {
+            "anchor": "gitlab",
+            "email": "gitlab",
+            "username": "gitlab",
+            "avatar": "./icons/gitlab.png"
+        }
+    ],
+    "channels": [
+        {
+            "anchor": "generalChat",
+            "icon": "./icons/general_chat.png",
+            "owner_id": "admin",
+            "type": 2,
+            "name": "General Chat",
+            "recipients": ["admin"]
+        },
+        {
+            "anchor": "generalNews",
+            "icon": "./icons/general_news.png",
+            "owner_id": "admin",
+            "type": 5,
+            "name": "General News",
+            "recipients": ["admin"]
+        },
+        {
+            "anchor": "managersChat",
+            "icon": "./icons/managers.png",
+            "owner_id": "admin",
+            "type": 2,
+            "name": "Managers",
+            "recipients": []
+        },
+        {
+            "anchor": "developersChat",
+            "icon": "./icons/developers.jpg",
+            "owner_id": "admin",
+            "type": 2,
+            "name": "Developers",
+            "recipients": []
+        },
+        {
+            "anchor": "projectByOrderChat",
+            "icon": "./icons/project_by_order.png",
+            "owner_id": "admin",
+            "type": 2,
+            "name": "Project by order",
+            "recipients": []
+        },
+        {
+            "anchor": "gitlabEventsChat",
+            "icon": "./icons/gitlab.png",
+            "owner_id": "admin",
+            "type": 4,
+            "name": "GitLab Events",
+            "recipients": []
+        }
+    ],
+    "roles": [
+        {
+            "anchor": "generalRole",
+            "name": "general",
+            "channels": [
+                "generalChat",
+                "generalNews"
+            ]
+        },
+        {
+            "anchor": "guestRole",
+            "name": "guest",
+            "channels": [
+                "projectByOrderChat"
+            ]
+        },
+        {
+            "anchor": "managersRole",
+            "name": "managers",
+            "channels": [
+                "managersChat"
+            ]
+        },
+        {
+            "anchor": "developersRole",
+            "name": "developers",
+            "channels": [
+                "developersChat",
+                "projectByOrderChat"
+            ]
+        }
+    ]
+}
